@@ -1,0 +1,9 @@
+<po-page-default>
+  <form [formGroup]="reactiveForm">
+    <div class="po-row po-mt-3">
+      <po-input class="po-md-9" formControlName="name" p-clean p-icon="an an-user" p-label="User Name"> </po-input>
+      <po-input class="po-md-9 po-mt-2" formControlName="session" p-clean p-icon="an an-chalkboard-teacher" p-label="Session Name"> </po-input>
+    </div>
+    <po-button class="po-m-5 po-md-8" p-label="Criar Sessao" (p-click)="onClick()" p-kind="primary"> </po-button>
+  </form>
+</po-page-default>
