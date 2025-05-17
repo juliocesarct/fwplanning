@@ -2,6 +2,7 @@ import { Component, ViewChild } from '@angular/core';
 import { UntypedFormBuilder, UntypedFormGroup, Validators } from '@angular/forms';
 
 import { PoModalAction, PoModalComponent } from '@po-ui/ng-components';
+import { FirebaseService } from '../services/firebase.service';
 
 @Component({
   selector: 'app-create-session',
@@ -20,13 +21,17 @@ export class CreateSessionComponent {
     label: 'Close'
   };
 
-  constructor(private fb: UntypedFormBuilder) {
+  constructor(
+    private fb: UntypedFormBuilder, 
+    private firebaseService: FirebaseService 
+  ) {
     this.createReactiveForm();
   }
 
   createReactiveForm() {
     this.reactiveForm = this.fb.group({
-      name: ['', Validators.compose([Validators.required, Validators.minLength(5), Validators.maxLength(30)])]
+      creator: ['', Validators.compose([Validators.required, Validators.minLength(5), Validators.maxLength(50)])],
+      name: ['', Validators.compose([Validators.required, Validators.minLength(3), Validators.maxLength(50)])]
     });
   }
 
@@ -35,7 +40,15 @@ export class CreateSessionComponent {
   }
 
   onClick() {
-    alert(`teste`)
+    if (this.reactiveForm.valid) {
+      const sessionData = this.reactiveForm.value; // Obtendo os dados do formulário
+
+      this.firebaseService.addSession(sessionData).then(() => {
+        console.log('Sessão adicionada com sucesso!');
+        this.reactiveForm.reset(); // Resetando o formulário após o envio
+      }).catch(error => {
+        console.error('Erro ao adicionar sessão: ', error);
+      });
+    }
   }
 }
-
