@@ -1,4 +1,5 @@
-import { NgModule } from '@angular/core';
+import { getFirestore, provideFirestore } from '@angular/fire/firestore';
+import { NgModule, provideZoneChangeDetection } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
 
 import { AppRoutingModule } from './app-routing.module';
@@ -9,7 +10,8 @@ import { CreateSessionComponent } from './create-session/create-session.componen
 import { ReactiveFormsModule } from '@angular/forms';
 import { environment } from '../environments/environment'; // A configuração do Firebase
 import { AngularFireModule } from '@angular/fire/compat';
-import { AngularFirestoreModule } from '@angular/fire/compat/firestore';
+import { provideFirebaseApp } from '@angular/fire/app';
+import { initializeApp } from 'firebase/app';
 
 @NgModule({
   declarations: [
@@ -22,10 +24,13 @@ import { AngularFirestoreModule } from '@angular/fire/compat/firestore';
     PoModule,
     ReactiveFormsModule,
     AngularFireModule.initializeApp(environment.firebaseConfig),
-    AngularFirestoreModule,
     RouterModule.forRoot([])
   ],
-  providers: [],
+  providers: [
+    provideZoneChangeDetection({eventCoalescing: true}),
+    provideFirebaseApp(() => initializeApp(environment.firebaseConfig)),
+    provideFirestore(() => getFirestore()),
+  ],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

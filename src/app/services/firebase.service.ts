@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { AngularFirestore } from '@angular/fire/compat/firestore'; // Importa o Firestore
+import { addDoc, collection, Firestore } from '@angular/fire/firestore';
 import { Observable } from 'rxjs';
 
 @Injectable({
@@ -7,17 +7,11 @@ import { Observable } from 'rxjs';
 })
 export class FirebaseService {
 
-  constructor(private firestore: AngularFirestore) { }
+  constructor(private firestore: Firestore) { }
 
   // Método para adicionar uma nova sessão
-  addSession(sessionData: { name: string, description: string }): Promise<any> {
-    return this.firestore.collection('sessions').add(sessionData);
+  addSession(sessionData: { name: string, description: string, createAt: Date }): Promise<any> {
+    return addDoc(collection(this.firestore,'sessions'),{ sessionData } );
   }
-
-  // Método para obter todas as sessões
-  getSessions(): Observable<any[]> {
-    return this.firestore.collection('sessions').valueChanges();
-  }
-
 
 }
