@@ -12,11 +12,13 @@ import { environment } from '../environments/environment'; // A configuração d
 import { AngularFireModule } from '@angular/fire/compat';
 import { provideFirebaseApp } from '@angular/fire/app';
 import { initializeApp } from 'firebase/app';
+import { SessionTasksComponent } from './session-tasks/session-tasks.component';
 
 @NgModule({
   declarations: [
     AppComponent,
-    CreateSessionComponent
+    CreateSessionComponent,
+    SessionTasksComponent
   ],
   imports: [
     BrowserModule,
