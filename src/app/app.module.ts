@@ -6,13 +6,13 @@ import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { PoModule } from '@po-ui/ng-components';
 import { RouterModule } from '@angular/router';
-import { CreateSessionComponent } from './create-session/create-session.component';
+import { CreateSessionComponent } from './pages/create-session/create-session.component';
 import { ReactiveFormsModule } from '@angular/forms';
 import { environment } from '../environments/environment'; // A configuração do Firebase
 import { AngularFireModule } from '@angular/fire/compat';
 import { provideFirebaseApp } from '@angular/fire/app';
 import { initializeApp } from 'firebase/app';
-import { SessionTasksComponent } from './session-tasks/session-tasks.component';
+import { SessionTasksComponent } from './pages/session-tasks/session-tasks.component';
 
 @NgModule({
   declarations: [
