@@ -1,4 +1,9 @@
-import { Component } from '@angular/core';
+import { Component, ViewChild } from '@angular/core';
+import { FirebaseService } from '../../services/firebase.service';
+import { ActivatedRoute, Router } from '@angular/router';
+import { TaskModel } from '../../models/task.model';
+import { PoModalAction, PoModalComponent, PoNotificationService } from '@po-ui/ng-components';
+import { NgForm } from '@angular/forms';
 
 @Component({
   selector: 'app-session-tasks',
@@ -7,9 +12,84 @@ import { Component } from '@angular/core';
   templateUrl: './session-tasks.component.html',
   styleUrl: './session-tasks.component.css'
 })
-export class SessionTasksComponent {
-
+export class SessionTasksComponent { 
+  @ViewChild('optionsForm', { static: true }) form!: NgForm;
+  @ViewChild(PoModalComponent, { static: true }) poModal!: PoModalComponent;
+  
   readonly userName = sessionStorage.getItem("user")
   readonly sessionName =  sessionStorage.getItem("sessionName")
+  sessionId: string | null = "";
+  tasks: TaskModel[] | undefined;
+  newTaskId: string = "";
+  newTaskDescription: string = "";
+
+  constructor(
+    private firebaseService: FirebaseService,
+    private router: Router,
+    private route: ActivatedRoute,
+    private poNotification: PoNotificationService
+  ){}
+
+  ngOnInit() {
+    this.sessionId = this.route.snapshot.paramMap.get('id');
+    this.getTasks()
+  }
+
+  getTasks(){
+    this.firebaseService.getTasks(this.sessionId! ).subscribe(
+      (data) => { 
+          this.tasks = data;
+        }
+    );  
+  }
+
+  addTask(){
+    this.poModal.open()
+  }
+
+  close: PoModalAction = {
+    action: () => {
+      this.closeModal();
+    },
+    label: 'Close',
+    danger: true
+  };
+
+  confirm: PoModalAction = {
+    action: () => {
+      this.proccessOrder();
+    },
+    label: 'Confirm'
+  };
+
+    closeModal() {
+    this.form.reset();
+    this.poModal.close();
+  }
+
+  confirmFruits() {
+    this.proccessOrder();
+  }
+
+  restore() {
+    this.form.reset();
+  }
+
+  private proccessOrder() {
+    if (this.form.invalid) {
+      const orderInvalidMessage = 'Choose the items to confirm the order.';
+      this.poNotification.warning(orderInvalidMessage);
+    } else {
+      this.confirm.loading = true;
+
+      setTimeout(() => {
+        this.poNotification.success(`teste`);
+        this.confirm.loading = false;
+        this.closeModal();
+      }, 700);
+    }
+  }
 
 }
+
+

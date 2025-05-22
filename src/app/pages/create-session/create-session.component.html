@@ -1,4 +1,4 @@
-<po-page-default>
+<div class="po-wrapper">
   <form [formGroup]="reactiveForm" (ngSubmit)="onClick()">
     <div class="po-row po-mt-3">
       <po-input class="po-md-9" formControlName="creator" p-clean p-icon="an an-user" p-label="User Name"> </po-input>
@@ -6,4 +6,4 @@
     </div>
     <po-button type="submit" [p-disabled]="reactiveForm.invalid" class="po-m-5 po-md-8" p-label="Criar Sessao" (p-click)="onClick()" p-kind="primary"> </po-button>
   </form>
-</po-page-default>
+</div>
