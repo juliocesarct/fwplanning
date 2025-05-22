@@ -48,10 +48,10 @@ export class CreateSessionComponent {
       this.firebaseService.addSession(sessionData).then(
       (data) => { console.log('Sessão adicionada com sucesso!'+data);
 
-        sessionStorage.setItem("session",data.id)
-        sessionStorage.setItem("user",sessionData.creator)
-        sessionStorage.setItem("creator",sessionData.creator)
-        sessionStorage.setItem("sessionName",sessionData.name)
+        localStorage.setItem("session",data.id)
+        localStorage.setItem("user",sessionData.creator)
+        localStorage.setItem("creator",sessionData.creator)
+        localStorage.setItem("sessionName",sessionData.name)
 
         this.router.navigate(['/session', data.id]);
 
