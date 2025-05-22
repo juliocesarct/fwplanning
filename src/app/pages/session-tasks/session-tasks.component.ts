@@ -12,38 +12,52 @@ import { NgForm } from '@angular/forms';
   templateUrl: './session-tasks.component.html',
   styleUrl: './session-tasks.component.css'
 })
-export class SessionTasksComponent { 
+export class SessionTasksComponent {
   @ViewChild('optionsForm', { static: true }) form!: NgForm;
   @ViewChild(PoModalComponent, { static: true }) poModal!: PoModalComponent;
-  
+
   readonly userName = sessionStorage.getItem("user")
-  readonly sessionName =  sessionStorage.getItem("sessionName")
+  readonly sessionName = sessionStorage.getItem("sessionName")
   sessionId: string | null = "";
   tasks: TaskModel[] | undefined;
-  newTaskId: string = "";
-  newTaskDescription: string = "";
+  newTaskId: string | undefined;
+  newTaskDescription: string | undefined;
 
+  private addNewTask() {
+    if (this.form.invalid) {
+      const orderInvalidMessage = 'Choose the items to confirm the order.';
+      this.poNotification.warning(orderInvalidMessage);
+    } else {
+      this.confirm.loading = true;
+
+      setTimeout(() => {
+        this.poNotification.success(`teste`);
+        this.confirm.loading = false;
+        this.closeModal();
+      }, 700);
+    }
+  }
   constructor(
     private firebaseService: FirebaseService,
     private router: Router,
     private route: ActivatedRoute,
     private poNotification: PoNotificationService
-  ){}
+  ) { }
 
   ngOnInit() {
     this.sessionId = this.route.snapshot.paramMap.get('id');
     this.getTasks()
   }
 
-  getTasks(){
-    this.firebaseService.getTasks(this.sessionId! ).subscribe(
-      (data) => { 
-          this.tasks = data;
-        }
-    );  
+  getTasks() {
+    this.firebaseService.getTasks(this.sessionId!).subscribe(
+      (data) => {
+        this.tasks = data;
+      }
+    );
   }
 
-  addTask(){
+  addTask() {
     this.poModal.open()
   }
 
@@ -57,37 +71,22 @@ export class SessionTasksComponent {
 
   confirm: PoModalAction = {
     action: () => {
-      this.proccessOrder();
+      this.addNewTask();
     },
     label: 'Confirm'
   };
 
-    closeModal() {
+  closeModal() {
     this.form.reset();
     this.poModal.close();
   }
 
-  confirmFruits() {
-    this.proccessOrder();
+  confirmTask() {
+    this.addNewTask();
   }
 
   restore() {
     this.form.reset();
-  }
-
-  private proccessOrder() {
-    if (this.form.invalid) {
-      const orderInvalidMessage = 'Choose the items to confirm the order.';
-      this.poNotification.warning(orderInvalidMessage);
-    } else {
-      this.confirm.loading = true;
-
-      setTimeout(() => {
-        this.poNotification.success(`teste`);
-        this.confirm.loading = false;
-        this.closeModal();
-      }, 700);
-    }
   }
 
 }
