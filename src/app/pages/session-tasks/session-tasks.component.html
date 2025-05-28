@@ -1,8 +1,10 @@
 <div class="po-wrapper">
 
-    <po-page-default p-title="Lista de tarefas da sessão">
+    <po-page-default class="row">
 
-        <p class="po-mb-5">Olá, {{userName}}! Bem vindo a sessão de planning {{sessionName}}.</p>
+      <h2>Tarefas da sessão</h2>
+
+        <p class="po-mb-5 po-mt-5">Olá, {{userName}}! Bem vindo a sessão de planning {{sessionName}}.</p>
 
         <po-button p-label="Adicionar tarefas" (p-click)="addTask()"> </po-button>
 
@@ -15,11 +17,11 @@
     <po-modal p-title="Options" [p-primary-action]="confirm" [p-secondary-action]="close">
         <form #optionsForm="ngForm">
             <div class="po-row">
-                <po-input class="po-md-12" name="orderDetail" [(ngModel)]="newTaskId" p-label="Código da tarefa:">
+                <po-input class="po-md-12" name="taskId" [(ngModel)]="newTask.taskId" p-label="Código da tarefa:">
                 </po-input>
             </div>
             <div class="po-row">
-                <po-textarea class="po-md-12" name="orderDetail" [(ngModel)]="newTaskDescription" p-label="Descrição:">
+                <po-textarea class="po-md-12" name="description" [(ngModel)]="newTask.description" p-label="Descrição:">
                 </po-textarea>
             </div>
         </form>
@@ -27,7 +29,7 @@
         <po-modal-footer [p-disabled-align]="false">
             <po-button p-danger="true" p-label="Close" (p-click)="closeModal()"> </po-button>
             <po-button p-label="Clear" (p-click)="restore()"> </po-button>
-            <po-button p-kind="primary" p-label="Confirm" (p-click)="confirmTask()"> </po-button>
+            <po-button p-kind="primary" p-label="Confirm" (p-click)="addNewTask()"> </po-button>
         </po-modal-footer>
 
     </po-modal>

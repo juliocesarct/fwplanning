@@ -2,6 +2,19 @@
 
 This project was generated using [Angular CLI](https://github.com/angular/angular-cli) version 19.2.12.
 
+# Fluxo do app
+
+## 1. Rota inicial "/"
+  
+  Página de criação de uma nova sessão onde o usuário deve informar seu nome e nome da sessão.
+
+## 2. #Rota da sessão "/session/id"
+  
+  Página da sessão, contendo a lista das tarefas que serão refinadas e o botão de adicionar nova tarefa.
+  O botão de adicionar tarefa abre uma modal para inclusão de novas tarefas.
+  As tarefas já cadatradas possuem o botão "Refinar" que irá direcionar para sala de votação.
+
+
 ## Development server
 
 To start a local development server, run:

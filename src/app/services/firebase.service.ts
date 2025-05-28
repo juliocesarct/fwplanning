@@ -20,7 +20,7 @@ export class FirebaseService {
   // Método para adicionar uma nova task
   addTask(taskData: TaskModel): Promise<any> {
     taskData.createdAt = new Date();
-    return addDoc(collection(this.firestore,'session'),{ taskData } );
+    return addDoc(collection(this.firestore,'tasks'),{ taskData } );
   }
 
   getTasks(sessionId: string): Observable<TaskModel[]> {

@@ -3,11 +3,17 @@ export class TaskModel {
   taskId: string;
   description: string;
   createdAt: Date;
+  result: number;
+  voters: number;
+  id: string | null;
 
-  constructor(sessionId: string, taskId: string, description: string, createdAt: Date) {
+  constructor(id:string, sessionId: string, taskId: string, description: string, createdAt: Date, result: number, voters: number) {
     this.sessionId = sessionId;
     this.taskId = taskId;
     this.description = description;
     this.createdAt = createdAt;
+    this.result = result;
+    this.voters = voters;
+    this.id = id;
   }
 }

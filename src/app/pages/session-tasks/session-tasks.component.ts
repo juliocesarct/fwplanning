@@ -1,6 +1,6 @@
 import { Component, ViewChild } from '@angular/core';
 import { FirebaseService } from '../../services/firebase.service';
-import { ActivatedRoute, Router } from '@angular/router';
+import { ActivatedRoute } from '@angular/router';
 import { TaskModel } from '../../models/task.model';
 import { PoModalAction, PoModalComponent, PoNotificationService } from '@po-ui/ng-components';
 import { NgForm } from '@angular/forms';
@@ -16,37 +16,41 @@ export class SessionTasksComponent {
   @ViewChild('optionsForm', { static: true }) form!: NgForm;
   @ViewChild(PoModalComponent, { static: true }) poModal!: PoModalComponent;
 
-  readonly userName = sessionStorage.getItem("user")
-  readonly sessionName = sessionStorage.getItem("sessionName")
+  readonly userName = localStorage.getItem("user")
+  readonly sessionName = localStorage.getItem("sessionName")
   sessionId: string | null = "";
   tasks: TaskModel[] | undefined;
-  newTaskId: string | undefined;
-  newTaskDescription: string | undefined;
+  newTask: TaskModel = new TaskModel("","","","",new Date(),0,0);
 
-  private addNewTask() {
-    if (this.form.invalid) {
-      const orderInvalidMessage = 'Choose the items to confirm the order.';
-      this.poNotification.warning(orderInvalidMessage);
-    } else {
-      this.confirm.loading = true;
-
-      setTimeout(() => {
-        this.poNotification.success(`teste`);
-        this.confirm.loading = false;
-        this.closeModal();
-      }, 700);
-    }
-  }
   constructor(
     private firebaseService: FirebaseService,
-    private router: Router,
     private route: ActivatedRoute,
     private poNotification: PoNotificationService
   ) { }
 
   ngOnInit() {
     this.sessionId = this.route.snapshot.paramMap.get('id');
-    this.getTasks()
+    //this.getTasks()
+  }
+
+  addNewTask() {
+    if (this.form.invalid) {
+      const InvalidMessage = 'Choose the items to confirm the teste.';
+      this.poNotification.warning(InvalidMessage);
+    } else {
+      this.confirm.loading = true;
+
+      this.firebaseService.addTask(this.newTask).then(
+      (data) => {
+        this.poNotification.success(`Task adicionada com sucesso!`);
+        this.confirm.loading = false;
+        this.form.reset(); // Resetando o formulário após o envio
+        this.closeModal();
+
+      }).catch(error => {
+        this.poNotification.error(error);
+      });
+    }
   }
 
   getTasks() {
@@ -79,10 +83,6 @@ export class SessionTasksComponent {
   closeModal() {
     this.form.reset();
     this.poModal.close();
-  }
-
-  confirmTask() {
-    this.addNewTask();
   }
 
   restore() {
