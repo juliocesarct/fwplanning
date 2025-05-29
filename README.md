@@ -8,12 +8,21 @@ This project was generated using [Angular CLI](https://github.com/angular/angula
   
   Página de criação de uma nova sessão onde o usuário deve informar seu nome e nome da sessão.
 
-## 2. #Rota da sessão "/session/id"
+## 2. Rota da sessão "/session/id"
   
+  ### 2.1 Criador da sessão
   Página da sessão, contendo a lista das tarefas que serão refinadas e o botão de adicionar nova tarefa.
   O botão de adicionar tarefa abre uma modal para inclusão de novas tarefas.
   As tarefas já cadatradas possuem o botão "Refinar" que irá direcionar para sala de votação.
 
+  ### 2.2 Participante
+  Os participantes que receberem o link já com id de uma sessão porém ainda não tiverem o usuário/nome registrado em local storage, serão direcionados para inicial onde é definido usuário, porém o campo sessão será ocultado.
+
+  Participantes com usuário devidamente registrado, serão direcionados para rota de sala de votação /sessionroom/id
+
+## 3. Rota de votação /sessionroom/id
+  Quando o usuário criador da sessão utilizar o botão "Refinar" da tarefa, o identificador da tarefa e sua descrição irão aparecer para todos os participantes.
+  
 
 ## Development server
 

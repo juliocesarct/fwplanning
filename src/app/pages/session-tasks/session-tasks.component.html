@@ -10,7 +10,7 @@
 
         <po-divider></po-divider>
 
-        <app-task *ngFor="let task of tasks" [taskId]="task.taskId" [description]="task.description"></app-task>
+        <app-task *ngFor="let task of tasks" [taskId]="task.taskData.taskId" [description]="task.taskData.description"></app-task>
 
     </po-page-default>
 

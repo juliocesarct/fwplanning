@@ -5,15 +5,29 @@ export class TaskModel {
   createdAt: Date;
   result: number;
   voters: number;
-  id: string | null;
+  refined: boolean;
 
-  constructor(id:string, sessionId: string, taskId: string, description: string, createdAt: Date, result: number, voters: number) {
+
+  constructor(sessionId: string, taskId: string, description: string, createdAt: Date, result: number, voters: number, refined: boolean) {
     this.sessionId = sessionId;
     this.taskId = taskId;
     this.description = description;
     this.createdAt = createdAt;
     this.result = result;
     this.voters = voters;
-    this.id = id;
+    this.refined = true;
+
   }
 }
+
+export class Tasks {
+  id: string;
+  taskData: TaskModel;
+
+  constructor(id: string,taskData: TaskModel ){
+    this.id = id;
+    this.taskData = taskData;
+  }
+}
+
+

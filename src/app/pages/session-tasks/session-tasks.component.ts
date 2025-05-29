@@ -1,7 +1,7 @@
 import { Component, ViewChild } from '@angular/core';
 import { FirebaseService } from '../../services/firebase.service';
-import { ActivatedRoute } from '@angular/router';
-import { TaskModel } from '../../models/task.model';
+import { ActivatedRoute, Router } from '@angular/router';
+import { TaskModel, Tasks } from '../../models/task.model';
 import { PoModalAction, PoModalComponent, PoNotificationService } from '@po-ui/ng-components';
 import { NgForm } from '@angular/forms';
 
@@ -19,18 +19,27 @@ export class SessionTasksComponent {
   readonly userName = localStorage.getItem("user")
   readonly sessionName = localStorage.getItem("sessionName")
   sessionId: string | null = "";
-  tasks: TaskModel[] | undefined;
-  newTask: TaskModel = new TaskModel("","","","",new Date(),0,0);
+  tasks: Tasks[] = [];
+  newTask: TaskModel = new TaskModel("","","",new Date(),0,0,false);
 
   constructor(
     private firebaseService: FirebaseService,
     private route: ActivatedRoute,
+    private router: Router,
     private poNotification: PoNotificationService
   ) { }
 
   ngOnInit() {
     this.sessionId = this.route.snapshot.paramMap.get('id');
-    //this.getTasks()
+
+    if( this.sessionId && localStorage.getItem('session') !== this.sessionId ){
+      localStorage.setItem('session', this.sessionId! )
+      if( localStorage.getItem('user') ){
+        this.router.navigate(['/'])
+      }
+    }
+
+    this.getTasks()
   }
 
   addNewTask() {
@@ -39,7 +48,7 @@ export class SessionTasksComponent {
       this.poNotification.warning(InvalidMessage);
     } else {
       this.confirm.loading = true;
-
+      this.newTask.sessionId = this.sessionId!
       this.firebaseService.addTask(this.newTask).then(
       (data) => {
         this.poNotification.success(`Task adicionada com sucesso!`);
@@ -56,6 +65,7 @@ export class SessionTasksComponent {
   getTasks() {
     this.firebaseService.getTasks(this.sessionId!).subscribe(
       (data) => {
+        console.log(data)
         this.tasks = data;
       }
     );
