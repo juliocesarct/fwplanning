@@ -9,3 +9,13 @@ export class SessionModel {
     this.createdAt = createdAt;
   }
 }
+
+export class Sessions {
+  id: string;
+  sessionData: SessionModel;
+
+  constructor(id:string, sessionData: SessionModel){
+    this.id = id;
+    this.sessionData = sessionData;
+  }
+}

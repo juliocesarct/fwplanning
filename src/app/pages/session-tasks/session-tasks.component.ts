@@ -1,3 +1,4 @@
+import { SessionModel } from './../../models/session.model';
 import { Component, ViewChild } from '@angular/core';
 import { FirebaseService } from '../../services/firebase.service';
 import { ActivatedRoute, Router } from '@angular/router';
@@ -16,8 +17,8 @@ export class SessionTasksComponent {
   @ViewChild('optionsForm', { static: true }) form!: NgForm;
   @ViewChild(PoModalComponent, { static: true }) poModal!: PoModalComponent;
 
-  readonly userName = localStorage.getItem("user")
-  readonly sessionName = localStorage.getItem("sessionName")
+  userName = localStorage.getItem("user")
+  sessionName = localStorage.getItem("sessionName")
   sessionId: string | null = "";
   tasks: Tasks[] = [];
   newTask: TaskModel = new TaskModel("","","",new Date(),0,0,false);
@@ -34,9 +35,19 @@ export class SessionTasksComponent {
 
     if( this.sessionId && localStorage.getItem('session') !== this.sessionId ){
       localStorage.setItem('session', this.sessionId! )
-      if( localStorage.getItem('user') ){
-        this.router.navigate(['/'])
+      if( !localStorage.getItem('user') ){
+        this.router.navigate(['createsession'])
       }
+      this.firebaseService.getSession(this.sessionId!).subscribe(
+          (data) => {
+            if(data.length > 0){
+              localStorage.setItem('sessionName', data[0].sessionData.name )
+              this.sessionName =  data[0].sessionData.name
+            }
+
+          },
+          (error) => {console.log(error)}
+      )
     }
 
     this.getTasks()
@@ -65,7 +76,6 @@ export class SessionTasksComponent {
   getTasks() {
     this.firebaseService.getTasks(this.sessionId!).subscribe(
       (data) => {
-        console.log(data)
         this.tasks = data;
       }
     );
