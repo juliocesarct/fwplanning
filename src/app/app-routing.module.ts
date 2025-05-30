@@ -7,6 +7,7 @@ import { AuthGuard } from './auth.guard';
 const routes: Routes = [
   { path: '', component: CreateSessionComponent }, // Rota padrão
   { path: 'createsession', component: CreateSessionComponent },
+  { path: 'createsession/:id', component: CreateSessionComponent },
   { path: 'session/:id', component: SessionTasksComponent, canActivate: [ AuthGuard ] }
 ];
 

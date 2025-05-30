@@ -4,6 +4,6 @@
       <po-input class="po-md-9" formControlName="creator" p-clean p-icon="an an-user" p-label="User Name"> </po-input>
       <po-input class="po-md-9 po-mt-2" formControlName="name" p-clean p-icon="an an-chalkboard-teacher" p-label="Session Name"> </po-input>
     </div>
-    <po-button type="submit" [p-disabled]="reactiveForm.invalid" class="po-m-5 po-md-8" p-label="Criar Sessao" (p-click)="onClick()" p-kind="primary"> </po-button>
+    <po-button type="submit" [p-disabled]="reactiveForm.invalid" class="po-m-5 po-md-8" [p-label]="buttonLabel" (p-click)="onClick()" p-kind="primary"> </po-button>
   </form>
 </div>

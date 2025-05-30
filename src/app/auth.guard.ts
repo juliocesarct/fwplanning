@@ -12,7 +12,7 @@ export class AuthGuard implements CanActivate {
     console.log('entrou no canActivate')
     const loggedIn = !!localStorage.getItem('user'); // Exemplo simples de validação
     if (!loggedIn) {
-      this.router.navigate(['/']);
+      this.router.navigate(['createsession/teste']);
       return false;
     }
     return true;

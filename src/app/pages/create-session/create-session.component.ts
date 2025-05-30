@@ -1,9 +1,9 @@
-import { Component, ViewChild } from '@angular/core';
+import { Component, OnInit, ViewChild } from '@angular/core';
 import { UntypedFormBuilder, UntypedFormGroup, Validators } from '@angular/forms';
 
 import { PoModalAction, PoModalComponent } from '@po-ui/ng-components';
 import { FirebaseService } from '../../services/firebase.service';
-import { Router } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 
 @Component({
   selector: 'app-create-session',
@@ -12,10 +12,12 @@ import { Router } from '@angular/router';
   templateUrl: './create-session.component.html',
   styleUrl: './create-session.component.css'
 })
-export class CreateSessionComponent {
+export class CreateSessionComponent implements OnInit {
   @ViewChild('reactiveFormData', { static: true }) reactiveFormModal!: PoModalComponent;
 
   reactiveForm!: UntypedFormGroup;
+  sessionId: string | null | undefined;
+  buttonLabel: string = "Criar sessão"
 
   public readonly modalPrimaryAction: PoModalAction = {
     action: () => this.reactiveFormModal.close(),
@@ -25,15 +27,30 @@ export class CreateSessionComponent {
   constructor(
     private fb: UntypedFormBuilder,
     private firebaseService: FirebaseService,
-    private router: Router
+    private router: Router,
+    private route: ActivatedRoute
   ) {
+
     this.createReactiveForm();
+
   }
+  ngOnInit(): void {
+      this.route.paramMap.subscribe(params => {
+      this.sessionId = params.get('id');
+      console.log('ID:', this.sessionId);
+    });
+
+    if (this.sessionId){
+      this.buttonLabel = "Acessar sessão"
+      this.reactiveForm.patchValue({name: this.sessionId})
+    }
+  }
+
 
   createReactiveForm() {
     this.reactiveForm = this.fb.group({
       creator: ['', Validators.compose([Validators.required, Validators.minLength(5), Validators.maxLength(50)])],
-      name: ['', Validators.compose([Validators.required, Validators.minLength(3), Validators.maxLength(50)])]
+      name: [this.sessionId, Validators.compose([Validators.required, Validators.minLength(3), Validators.maxLength(50)])]
     });
   }
 
