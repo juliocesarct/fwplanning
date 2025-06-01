@@ -1,18 +1,18 @@
 <div class="po-wrapper">
 
-    <po-page-default class="row">
+    <div class="row po-m-2">
 
       <h2>Tarefas da sessão</h2>
 
         <p class="po-mb-5 po-mt-5">Olá, {{userName}}! Bem vindo a sessão de planning {{sessionName}}.</p>
 
-        <po-button p-label="Adicionar tarefas" (p-click)="addTask()"> </po-button>
+        <po-button *ngIf="isCreator" p-label="Adicionar tarefas" (p-click)="addTask()"> </po-button>
 
         <po-divider></po-divider>
 
-        <app-task *ngFor="let task of tasks" [taskId]="task.taskData.taskId" [description]="task.taskData.description"></app-task>
+        <app-task *ngFor="let task of tasks" [showButton]="isCreator" [taskId]="task.taskData.taskId" [description]="task.taskData.description"></app-task>
 
-    </po-page-default>
+    </div>
 
     <po-modal p-title="Options" [p-primary-action]="confirm" [p-secondary-action]="close">
         <form #optionsForm="ngForm">
@@ -28,7 +28,6 @@
 
         <po-modal-footer [p-disabled-align]="false">
             <po-button p-danger="true" p-label="Close" (p-click)="closeModal()"> </po-button>
-            <po-button p-label="Clear" (p-click)="restore()"> </po-button>
             <po-button p-kind="primary" p-label="Confirm" (p-click)="addNewTask()"> </po-button>
         </po-modal-footer>
 

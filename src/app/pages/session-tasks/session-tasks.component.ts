@@ -22,6 +22,7 @@ export class SessionTasksComponent {
   sessionId: string | null = "";
   tasks: Tasks[] = [];
   newTask: TaskModel = new TaskModel("","","",new Date(),0,0,false);
+  isCreator: boolean = false;
 
   constructor(
     private firebaseService: FirebaseService,
@@ -49,6 +50,8 @@ export class SessionTasksComponent {
           (error) => {console.log(error)}
       )
     }
+
+    this.isCreator = this.userName == localStorage.getItem('creator')
 
     this.getTasks()
   }

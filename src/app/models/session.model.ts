@@ -2,13 +2,15 @@ export class SessionModel {
   name: string;
   creator: string;
   createdAt: Date;
-  id: string;
+  currentTask: string;
 
-  constructor(name: string, creator: string, createdAt: Date,id:string) {
-    this.id = id;
+
+  constructor(name: string, creator: string, createdAt: Date) {
     this.name = name;
     this.creator = creator;
     this.createdAt = createdAt;
+    this.currentTask = "";
+
   }
 }
 

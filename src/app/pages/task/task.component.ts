@@ -11,6 +11,7 @@ export class TaskComponent {
 
   @Input() taskId: string = 'TaskId';
   @Input() description: string = 'Descripton';
+  @Input() showButton: boolean = false;
 
   refine(){
 
