@@ -37,7 +37,18 @@ export class CreateSessionComponent implements OnInit {
   ngOnInit(): void {
       this.route.paramMap.subscribe(params => {
       this.sessionId = params.get('id');
-      console.log('ID:', this.sessionId);
+      this.firebaseService.getSession(this.sessionId!).subscribe(
+          (data) => {
+            if(data){
+              localStorage.setItem('sessionName', data.sessionData.name )
+              localStorage.setItem("session",this.sessionId!)
+              localStorage.setItem("creator",data.sessionData.creator)
+              localStorage.setItem("sessionName",data.sessionData.name)
+            }
+
+          },
+          (error) => {console.log(error)}
+      )
     });
 
     if (this.sessionId){
@@ -59,23 +70,28 @@ export class CreateSessionComponent implements OnInit {
   }
 
   onClick() {
-    if (this.reactiveForm.valid) {
-      const sessionData = this.reactiveForm.value; // Obtendo os dados do formulário
+    const sessionData = this.reactiveForm.value; // Obtendo os dados do formulário
 
-      this.firebaseService.addSession(sessionData).then(
-      (data) => { console.log('Sessão adicionada com sucesso!'+data);
+    if (this.sessionId){
+      localStorage.setItem("user",sessionData.creator)
+      this.router.navigate(['/session', this.sessionId!]);
+    }else{
+      if (this.reactiveForm.valid) {
+        this.firebaseService.addSession(sessionData).then(
+        (data) => { console.log('Sessão adicionada com sucesso!'+data);
 
-        localStorage.setItem("session",data.id)
-        localStorage.setItem("user",sessionData.creator)
-        localStorage.setItem("creator",sessionData.creator)
-        localStorage.setItem("sessionName",sessionData.name)
+          localStorage.setItem("session",data.id)
+          localStorage.setItem("user",sessionData.creator)
+          localStorage.setItem("creator",sessionData.creator)
+          localStorage.setItem("sessionName",sessionData.name)
 
-        this.router.navigate(['/session', data.id]);
+          this.router.navigate(['/session', data.id]);
 
-        this.reactiveForm.reset(); // Resetando o formulário após o envio
-      }).catch(error => {
-        console.error('Erro ao adicionar sessão: ', error);
-      });
+          this.reactiveForm.reset(); // Resetando o formulário após o envio
+        }).catch(error => {
+          console.error('Erro ao adicionar sessão: ', error);
+        });
+      }
     }
   }
 }

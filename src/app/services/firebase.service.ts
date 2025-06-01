@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
-import { addDoc, collection, collectionData, Firestore, getDocs, query, where } from '@angular/fire/firestore';
+import { addDoc, collection, collectionData, doc, docData, Firestore, getDocs, query, where } from '@angular/fire/firestore';
 import { from, Observable } from 'rxjs';
-import { SessionModel, Sessions } from '../models/session.model';
+import { Session, SessionModel } from '../models/session.model';
 import { TaskModel, Tasks } from '../models/task.model';
 
 @Injectable({
@@ -24,10 +24,9 @@ export class FirebaseService {
     return addDoc(collection(this.firestore,'tasks'),{ taskData } );
   }
 
-  getSession(sessionId: string): Observable<Sessions[]> {
-    const itensRef = collection(this.firestore, 'session');
-    const itensQuery = query(itensRef, where('id', '==', sessionId));
-    return collectionData(itensQuery, { idField: 'id' }) as Observable<Sessions[]>;
+  getSession(sessionId: string): Observable<Session> {
+    const docRef = doc(this.firestore, 'session', sessionId);
+    return docData(docRef, { idField: 'id' }) as Observable<Session>;
   }
 
   getTasks(sessionId: string): Observable<Tasks[]> {

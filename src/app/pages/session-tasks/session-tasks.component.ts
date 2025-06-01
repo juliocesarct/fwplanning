@@ -40,9 +40,9 @@ export class SessionTasksComponent {
       }
       this.firebaseService.getSession(this.sessionId!).subscribe(
           (data) => {
-            if(data.length > 0){
-              localStorage.setItem('sessionName', data[0].sessionData.name )
-              this.sessionName =  data[0].sessionData.name
+            if(data){
+              localStorage.setItem('sessionName', data.sessionData.name )
+              this.sessionName =  data.sessionData.name
             }
 
           },
