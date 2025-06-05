@@ -14,13 +14,15 @@ import { provideFirebaseApp } from '@angular/fire/app';
 import { initializeApp } from 'firebase/app';
 import { SessionTasksComponent } from './pages/session-tasks/session-tasks.component';
 import { TaskComponent } from './pages/task/task.component';
+import { SessionRoomComponent } from './pages/session-room/session-room.component';
 
 @NgModule({
   declarations: [
     AppComponent,
     CreateSessionComponent,
     SessionTasksComponent,
-    TaskComponent
+    TaskComponent,
+    SessionRoomComponent
   ],
   imports: [
     BrowserModule,

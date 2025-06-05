@@ -1,4 +1,3 @@
-import { SessionModel } from './../../models/session.model';
 import { Component, ViewChild } from '@angular/core';
 import { FirebaseService } from '../../services/firebase.service';
 import { ActivatedRoute, Router } from '@angular/router';

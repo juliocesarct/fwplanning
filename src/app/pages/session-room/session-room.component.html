@@ -1,0 +1,10 @@
+<div class="po-row">
+  <app-session-tasks class="po-md-2 po-lg-2"></app-session-tasks>
+  <div>
+    <h2>Sala de Planejamento: </h2>
+    <div class="po-row po-lg-10 po-md-10" *ngFor="let user of sessionUsers">
+      <po-avatar [p-tooltip]="user" p-src="https://po-ui.io/assets/graphics/logo-po.png"> </po-avatar>
+      <po-label [p-label]="user"></po-label>
+    </div>
+  </div>
+</div>
