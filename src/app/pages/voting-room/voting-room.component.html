@@ -1,0 +1,62 @@
+<div class="po-row">
+  <app-session-tasks class="po-md-3 po-lg-3"></app-session-tasks>
+  <div class="po-md-9">
+    <h1 class="po-font-title">Votação:</h1>
+      <div class="container-usuarios">
+        <div *ngFor="let user of sessionUsers">
+          <po-avatar
+            class="usuarios"
+            [p-tooltip]="user"
+            p-src="https://po-ui.io/assets/graphics/logo-po.png"
+          >
+          </po-avatar>
+        </div>
+      </div>
+
+        <div class="po-row">
+    <div class="po-md-12">
+
+      <po-stepper
+        #meuStepper
+        [p-steps]="steps"
+        [p-disable-click]="true"
+        (p-change-step)="atualizarPassoAtual( $event )"
+      >
+        <po-step *ngFor="let step of steps" [p-label]="step.label!" [p-icon-default]="step.iconDefault">
+          <h2>{{ step.label }}</h2>
+          <p class="po-m-2" *ngFor="let question of step.values">* {{question}}</p>
+          <po-radio-group
+            name="tests"
+            p-label="Selecione o valor mais adequado de acordo com a perguntas acima:"
+            [p-options]="step.options"
+            [(ngModel)]="step.answer">
+          </po-radio-group>
+        </po-step>
+      </po-stepper>
+
+      <div class="po-row po-mt-2">
+        <div class="po-md-12 po-text-right">
+
+          <po-button
+            *ngIf="passoAtual !== 'Testes'"
+            p-label="Avançar"
+            (p-click)="next()"
+            [p-disabled]="(passoAtual === 'Escopo' && !steps[0].answer ) || (passoAtual === 'Desenvolvimento' && !steps[1].answer)">
+          </po-button>
+
+          <po-button
+            *ngIf="passoAtual == 'Testes'"
+            p-label="Finalizar"
+            p-kind="primary"
+            (p-click)="finalizarAcao()"
+            [p-disabled]="!steps[2].answer">
+          </po-button>
+
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  </div>
+</div>

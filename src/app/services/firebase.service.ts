@@ -37,6 +37,8 @@ export class FirebaseService {
 
    updateTask(task: Partial<Task>): Promise<void> {
     const taskDocRef = doc(this.firestore, 'tasks', task.id!);
+    const voters = task.taskData!.voters.map((obj)=> {return Object.assign({}, obj)});
+    task.taskData!.voters = voters;
     return updateDoc(taskDocRef, {'taskData': task.taskData!});
   }
 

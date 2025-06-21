@@ -5,11 +5,11 @@ export class TaskModel {
   createdAt: Date;
   updatedAt: Date;
   result: number;
-  voters: number;
+  voters: Array<Voter>;
   voting: boolean;
 
 
-  constructor(sessionId: string, taskId: string, description: string, createdAt: Date, updatedAt: Date, result: number, voters: number, voting: boolean) {
+  constructor(sessionId: string, taskId: string, description: string, createdAt: Date, updatedAt: Date, result: number, voters: Array<Voter>, voting: boolean) {
     this.sessionId = sessionId;
     this.taskId = taskId;
     this.description = description;
@@ -19,6 +19,18 @@ export class TaskModel {
     this.voters = voters;
     this.voting = false;
 
+  }
+}
+
+export class Voter{
+  name: string;
+  hasVoted: boolean;
+  vote: number;
+
+  constructor(name: string, hasVoted: boolean, vote:number){
+    this.name = name;
+    this.hasVoted = hasVoted;
+    this.vote = vote;
   }
 }
 

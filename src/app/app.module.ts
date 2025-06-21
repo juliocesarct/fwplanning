@@ -12,7 +12,7 @@ import { environment } from '../environments/environment'; // A configuração d
 import { AngularFireModule } from '@angular/fire/compat';
 import { provideFirebaseApp } from '@angular/fire/app';
 import { initializeApp } from 'firebase/app';
-import { SessionRoomComponent } from './pages/session-room/session-room.component';
+import { VotingRoomComponent } from './pages/voting-room/voting-room.component';
 import { SessionTasksComponent } from './pages/session-tasks/session-tasks.component';
 import { TaskComponent } from './pages/task/task.component';
 
@@ -20,7 +20,7 @@ import { TaskComponent } from './pages/task/task.component';
   declarations: [
     AppComponent,
     CreateSessionComponent,
-    SessionRoomComponent
+    VotingRoomComponent
   ],
   imports: [
     BrowserModule,

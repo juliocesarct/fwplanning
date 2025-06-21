@@ -22,7 +22,7 @@ export class SessionTasksComponent {
   sessionName = localStorage.getItem("sessionName")
   sessionId: string | null = "";
   tasks: any;
-  newTask: TaskModel = new TaskModel("","","",new Date(), new Date(),0,0,false);
+  newTask: TaskModel = new TaskModel("","","",new Date(), new Date(),0,[],false);
   isCreator: boolean = false;
 
   constructor(
@@ -33,7 +33,7 @@ export class SessionTasksComponent {
   ) { }
 
   ngOnInit() {
-    this.sessionId = this.route.snapshot.paramMap.get('id');
+    this.sessionId = this.route.snapshot.paramMap.get('sessionId');
 
     if( this.sessionId && localStorage.getItem('session') !== this.sessionId ){
       localStorage.setItem('session', this.sessionId! )

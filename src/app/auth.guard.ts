@@ -9,10 +9,10 @@ export class AuthGuard implements CanActivate {
   constructor(private router: Router) {}
 
   canActivate( route: ActivatedRouteSnapshot,): boolean {
-    route.paramMap.get('id')
+    route.paramMap.get('sessionId')
     const loggedIn = !!localStorage.getItem('user'); // Exemplo simples de validação
     if (!loggedIn) {
-      this.router.navigate(['joinsession/',route.paramMap.get('id')]);
+      this.router.navigate(['joinsession/',route.paramMap.get('sessionId')]);
       return false;
     }
     return true;

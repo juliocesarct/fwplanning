@@ -1,6 +1,6 @@
-import { Component, Input, OnInit } from '@angular/core';
+import { Component, EventEmitter, Input, model, OnInit, Output } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
-import { Task } from '../../models/task.model';
+import { Task, Voter } from '../../models/task.model';
 import { FirebaseService } from '../../services/firebase.service';
 import { PoModule } from '@po-ui/ng-components';
 import { CommonModule } from '@angular/common';
@@ -18,6 +18,7 @@ export class TaskComponent implements OnInit {
   @Input() showButton: boolean = false;
 
   sessionId: string | null = null;
+  taskVoting: boolean = localStorage.getItem('voting') === 'true';
 
   constructor(
     private router: Router,
@@ -26,11 +27,12 @@ export class TaskComponent implements OnInit {
   ){}
 
   ngOnInit(): void {
-    this.sessionId = this.route.snapshot.paramMap.get('id');
+    this.sessionId = this.route.snapshot.paramMap.get('sessionId');
   }
 
   plan(){
 
+    localStorage.setItem('voting','true')
     this.task.taskData!.voting = true;
     this.task.taskData!.updatedAt = new Date();
 
@@ -41,7 +43,28 @@ export class TaskComponent implements OnInit {
           console.error('Erro ao atualizar task: ', error);
         });
 
-    this.router.navigate(['session-room/',this.sessionId])
+    this.router.navigate(['voting-room/',this.sessionId, this.task.id])
+  }
+
+  vote(){
+
+    const voter: Voter = new Voter(localStorage.getItem('user')!,false,0);
+
+    this.task.taskData!.updatedAt = new Date();
+    this.task.taskData!.voters.push(voter)
+
+    this.firebase.updateTask(this.task).then(
+        (data) => {
+          console.log('Task atualizada com sucesso!'+data);
+        }).catch(error => {
+          console.error('Erro ao atualizar task: ', error);
+        });
+
+      this.router.navigate(['voting-room/',this.sessionId, this.task.id])
+    }
+
+    complete(){
+      localStorage.setItem('voting','false');
   }
 
 }

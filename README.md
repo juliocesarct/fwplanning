@@ -18,9 +18,9 @@ This project was generated using [Angular CLI](https://github.com/angular/angula
   ### 2.2 Participante
   Os participantes que receberem o link já com id de uma sessão porém ainda não tiverem o usuário/nome registrado em local storage, serão direcionados para inicial onde é definido usuário, porém o campo sessão será ocultado.
 
-  Participantes com usuário devidamente registrado, serão direcionados para rota de sala de votação /sessionroom/id
+  Participantes com usuário devidamente registrado, serão direcionados para rota de sala de votação /VotingRoom/id
 
-## 3. Rota de votação /sessionroom/id
+## 3. Rota de votação /VotingRoom/id
   Quando o usuário criador da sessão utilizar o botão "Refinar" da tarefa, o identificador da tarefa e sua descrição irão aparecer para todos os participantes.
   
 

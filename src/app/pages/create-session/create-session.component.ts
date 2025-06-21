@@ -36,7 +36,7 @@ export class CreateSessionComponent implements OnInit {
   }
   ngOnInit(): void {
       this.route.paramMap.subscribe(params => {
-      this.sessionId = params.get('id');
+      this.sessionId = params.get('sessionId');
       this.firebaseService.getSession(this.sessionId!).subscribe(
           (data) => {
             if(data){
