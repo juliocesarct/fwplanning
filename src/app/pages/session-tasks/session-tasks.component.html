@@ -10,7 +10,7 @@
 
         <po-divider></po-divider>
 
-        <app-task *ngFor="let task of tasks" [showButton]="isCreator" [taskId]="task.taskData.taskId" [description]="task.taskData.description"></app-task>
+        <app-task *ngFor="let task of tasks" [task]="task" [showButton]="isCreator"></app-task>
 
     </div>
 

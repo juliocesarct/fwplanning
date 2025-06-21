@@ -1,14 +1,16 @@
 import { Component, ViewChild } from '@angular/core';
 import { FirebaseService } from '../../services/firebase.service';
 import { ActivatedRoute, Router } from '@angular/router';
-import { TaskModel, Tasks } from '../../models/task.model';
-import { PoModalAction, PoModalComponent, PoNotificationService } from '@po-ui/ng-components';
-import { NgForm } from '@angular/forms';
+import { TaskModel, Task } from '../../models/task.model';
+import { PoModalAction, PoModalComponent, PoModule, PoNotificationService } from '@po-ui/ng-components';
+import { FormsModule, NgForm, ReactiveFormsModule } from '@angular/forms';
+import { TaskComponent } from '../task/task.component';
+import { CommonModule } from '@angular/common';
 
 @Component({
   selector: 'app-session-tasks',
-  standalone: false,
-
+  standalone: true,
+  imports: [PoModule,ReactiveFormsModule,FormsModule, TaskComponent, CommonModule],
   templateUrl: './session-tasks.component.html',
   styleUrl: './session-tasks.component.css'
 })
@@ -19,8 +21,8 @@ export class SessionTasksComponent {
   userName = localStorage.getItem("user")
   sessionName = localStorage.getItem("sessionName")
   sessionId: string | null = "";
-  tasks: Tasks[] = [];
-  newTask: TaskModel = new TaskModel("","","",new Date(),0,0,false);
+  tasks: any;
+  newTask: TaskModel = new TaskModel("","","",new Date(), new Date(),0,0,false);
   isCreator: boolean = false;
 
   constructor(

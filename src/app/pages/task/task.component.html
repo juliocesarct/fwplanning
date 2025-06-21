@@ -1,5 +1,12 @@
-<po-container>
-    <h1>{{taskId}}</h1>
-    <p>{{description}}</p>
-    <po-button *ngIf="showButton" p-label="Planejar" (p-click)="plan()"> </po-button>
-</po-container>
+<div class="po-m-2">
+  <po-container >
+    <div class="po-md-6 po-sm-3">
+      <h2>{{task.taskData!.taskId}}</h2>
+      <p>{{task.taskData!.description}}</p>
+    </div>
+    <div class="po-md-6 po-sm-9">
+      <po-button class="po-md-12" *ngIf="showButton && !task.taskData!.voting" p-label="Planejar" (p-click)="plan()"> </po-button>
+      <po-button class="po-md-12" p-kind="primary" *ngIf="showButton && task.taskData!.voting" p-label="Finalizar" (p-click)="plan()"> </po-button>
+    </div>
+  </po-container>
+</div>

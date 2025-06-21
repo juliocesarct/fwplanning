@@ -3,28 +3,30 @@ export class TaskModel {
   taskId: string;
   description: string;
   createdAt: Date;
+  updatedAt: Date;
   result: number;
   voters: number;
-  refined: boolean;
+  voting: boolean;
 
 
-  constructor(sessionId: string, taskId: string, description: string, createdAt: Date, result: number, voters: number, refined: boolean) {
+  constructor(sessionId: string, taskId: string, description: string, createdAt: Date, updatedAt: Date, result: number, voters: number, voting: boolean) {
     this.sessionId = sessionId;
     this.taskId = taskId;
     this.description = description;
     this.createdAt = createdAt;
+    this.updatedAt = updatedAt;
     this.result = result;
     this.voters = voters;
-    this.refined = true;
+    this.voting = false;
 
   }
 }
 
-export class Tasks {
-  id: string;
-  taskData: TaskModel;
+export class Task {
+  id?: string;
+  taskData?: TaskModel;
 
-  constructor(id: string,taskData: TaskModel ){
+  constructor(id?: string, taskData?: TaskModel ){
     this.id = id;
     this.taskData = taskData;
   }

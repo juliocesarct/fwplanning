@@ -1,8 +1,8 @@
 import { Injectable } from '@angular/core';
-import { addDoc, collection, collectionData, doc, docData, Firestore, getDocs, query, where } from '@angular/fire/firestore';
-import { from, Observable } from 'rxjs';
+import { addDoc, collection, collectionData, doc, docData, Firestore, getDocs, query, updateDoc, where } from '@angular/fire/firestore';
+import { Observable } from 'rxjs';
 import { Session, SessionModel } from '../models/session.model';
-import { TaskModel, Tasks } from '../models/task.model';
+import { TaskModel, Task } from '../models/task.model';
 
 @Injectable({
   providedIn: 'root'
@@ -29,10 +29,20 @@ export class FirebaseService {
     return docData(docRef, { idField: 'id' }) as Observable<Session>;
   }
 
-  getTasks(sessionId: string): Observable<Tasks[]> {
+  getTasks(sessionId: string): Observable<Task[]> {
     const itensRef = collection(this.firestore, 'tasks');
     const itensQuery = query(itensRef, where('taskData.sessionId', '==', sessionId));
-    return collectionData(itensQuery, { idField: 'id' }) as Observable<Tasks[]>;
+    return collectionData(itensQuery, { idField: 'id' }) as Observable<Task[]>;
+  }
+
+   updateTask(task: Partial<Task>): Promise<void> {
+    const taskDocRef = doc(this.firestore, 'tasks', task.id!);
+    return updateDoc(taskDocRef, {'taskData': task.taskData!});
+  }
+
+  updateSession(sessionId: string, sessionData: Partial<SessionModel>): Promise<void> {
+    const sessionDocRef = doc(this.firestore, 'session', sessionId);
+    return updateDoc(sessionDocRef, sessionData);
   }
 
 }
