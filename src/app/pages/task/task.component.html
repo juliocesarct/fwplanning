@@ -3,11 +3,12 @@
     <div class="po-md-6 po-sm-3">
       <h2>{{task.taskData!.taskId}}</h2>
       <p>{{task.taskData!.description}}</p>
+      <p *ngIf="resultSize">Resultado parcial: {{resultSize}}</p>
     </div>
     <div class="po-md-6 po-sm-9">
-      <po-button class="po-md-12" *ngIf="showButton && !task.taskData!.voting && !taskVoting" p-label="Refinar" (p-click)="plan()"> </po-button>
-      <po-button class="po-md-12" *ngIf="!showButton && task.taskData!.voting" p-label="Votar" (p-click)="vote()"> </po-button>
-      <po-button class="po-md-12" p-kind="primary" *ngIf="showButton && task.taskData!.voting" p-label="Finalizar" (p-click)="complete()"> </po-button>
+      <po-button class="po-md-12" *ngIf="isCreator && !task.taskData!.voting" p-label="Refinar" (p-click)="plan()"> </po-button>
+      <po-button class="po-md-12" *ngIf="!isCreator && task.taskData!.voting && !isInVotingRoom" p-label="Votar" (p-click)="vote()"> </po-button>
+      <po-button class="po-md-12" p-kind="primary" *ngIf="isCreator && task.taskData!.voting" p-label="Finalizar" (p-click)="complete()"> </po-button>
     </div>
   </po-container>
 </div>

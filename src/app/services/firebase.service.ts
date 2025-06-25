@@ -29,6 +29,11 @@ export class FirebaseService {
     return docData(docRef, { idField: 'id' }) as Observable<Session>;
   }
 
+  getTask(taskId: string): Observable<Task> {
+    const docRef = doc(this.firestore, 'tasks', taskId);
+    return docData(docRef, { idField: 'id' }) as Observable<Task>;
+  }
+
   getTasks(sessionId: string): Observable<Task[]> {
     const itensRef = collection(this.firestore, 'tasks');
     const itensQuery = query(itensRef, where('taskData.sessionId', '==', sessionId));

@@ -1,6 +1,9 @@
-import { Component, ViewChild } from '@angular/core';
+import { Component, OnInit, ViewChild } from '@angular/core';
 import { NgForm } from '@angular/forms';
 import { PoRadioGroupOption, PoStepperComponent, PoStepComponent } from '@po-ui/ng-components';
+import { FirebaseService } from '../../services/firebase.service';
+import { ActivatedRoute, Router } from '@angular/router';
+import { Task, Voter } from '../../models/task.model';
 
 @Component({
   selector: 'app-voting-room',
@@ -9,12 +12,31 @@ import { PoRadioGroupOption, PoStepperComponent, PoStepComponent } from '@po-ui/
   templateUrl: './voting-room.component.html',
   styleUrl: './voting-room.component.css'
 })
-export class VotingRoomComponent {
+export class VotingRoomComponent implements OnInit {
 
   @ViewChild('meuStepper') meuStepper: PoStepperComponent | undefined;
 
-  sessionUsers = ['J', 'C', 'P'];
+  sessionUsers: Array<Voter> = [];
   passoAtual: any;
+  task: Task | undefined;
+
+  constructor(
+    private firebase: FirebaseService,
+    private route: ActivatedRoute,
+    private router: Router
+  ){}
+
+  ngOnInit(): void {
+    if(this.route.snapshot.paramMap.get('taskId')){
+      this.firebase.getTask(this.route.snapshot.paramMap.get('taskId')!).subscribe(
+        data => {
+          this.task = data
+          this.sessionUsers = this.task.taskData!.voters;
+        },
+        error => console.log(error)
+      )
+    }
+  }
 
   // Opções para o radio group do Passo 1
   readonly objectiveOptions: Array<PoRadioGroupOption> = [
@@ -79,9 +101,28 @@ export class VotingRoomComponent {
       step.answer > 0 ? points += step.answer : questions-- ;
     })
 
-    result = questions > 1 ? Math.round(points/questions): points;
+    result = questions >= 1 ? Math.round(points/questions): points;
 
     alert(result);
+
+    this.task!.taskData!.updatedAt = new Date();
+
+    if(questions >= 1){
+      for (const voter of this.task!.taskData!.voters) {
+        if (voter.name === localStorage.getItem('user')) {
+          voter.hasVoted = true;
+          voter.vote = result;
+        }
+      }
+
+      this.firebase.updateTask(this.task!).then(
+      () => {
+        console.log('Task atualizada com sucesso!');
+      }).catch(error => {
+        console.error('Erro ao atualizar task: ', error);
+      });
+    }
+    this.router.navigate(['/session', this.route.snapshot.paramMap.get('sessionId') ]);
   }
 
 }
