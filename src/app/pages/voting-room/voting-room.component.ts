@@ -105,21 +105,20 @@ export class VotingRoomComponent implements OnInit {
 
       this.task!.taskData!.updatedAt = new Date();
 
-      if(questions >= 1){
-        for (const voter of this.task!.taskData!.voters) {
-          if (voter.name === localStorage.getItem('user')) {
-            voter.hasVoted = true;
-            voter.vote = result;
-          }
+      for (const voter of this.task!.taskData!.voters) {
+        if (voter.name === localStorage.getItem('user')) {
+          voter.hasVoted = true;
+          voter.vote = result;
         }
-
-        this.firebase.updateTask(this.task!).then(
-        () => {
-          console.log('Task atualizada com sucesso!');
-        }).catch(error => {
-          console.error('Erro ao atualizar task: ', error);
-        });
       }
+
+      this.firebase.updateTask(this.task!).then(
+      () => {
+        console.log('Task atualizada com sucesso!');
+      }).catch(error => {
+        console.error('Erro ao atualizar task: ', error);
+      });
+
     }
 
     this.router.navigate(['/session', this.route.snapshot.paramMap.get('sessionId') ]);
