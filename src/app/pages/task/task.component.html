@@ -3,7 +3,7 @@
     <div class="po-md-6 po-sm-3">
       <h2>{{task.taskData!.taskId}}</h2>
       <p>{{task.taskData!.description}}</p>
-      <p *ngIf="resultSize">Resultado parcial: {{resultSize}}</p>
+      <p *ngIf="resultSize && !task.taskData!.voting">Resultado: {{resultSize}}</p>
     </div>
     <div class="po-md-6 po-sm-9">
       <po-button class="po-md-12" *ngIf="isCreator && !task.taskData!.voting" p-label="Refinar" (p-click)="plan()"> </po-button>

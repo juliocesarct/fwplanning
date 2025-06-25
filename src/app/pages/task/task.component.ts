@@ -49,6 +49,8 @@ export class TaskComponent implements OnInit {
       this.resultSize = "G"
     }
 
+    this.task.taskData!.result = result;
+
   }
 
   plan(){
