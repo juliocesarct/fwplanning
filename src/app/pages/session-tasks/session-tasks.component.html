@@ -1,12 +1,6 @@
-<div class="po-wrapper">
+<po-page-default [p-actions]="actions" p-title="Tarefas da sessão" p-subtitle="Olá, {{userName}}! Bem vindo a sessão de planning {{sessionName}}.">
 
     <div class="row po-m-2">
-
-      <h2>Tarefas da sessão</h2>
-
-        <p class="po-mb-5 po-mt-5">Olá, {{userName}}! Bem vindo a sessão de planning {{sessionName}}.</p>
-
-        <po-button class="po-md-12" *ngIf="isCreator" p-kind="primary" p-label="Adicionar nova tarefa" (p-click)="addTask()"> </po-button>
 
         <po-divider class="po-m-2"></po-divider>
 
@@ -33,4 +27,4 @@
 
     </po-modal>
 
-</div>
+</po-page-default>

@@ -1,13 +1,24 @@
 <div class="po-m-2">
-  <po-container>
-    <div class="po-md-6 po-sm-12">
-      <h2 class="po-mb-1">{{task.taskData!.taskId}}</h2>
+  <po-container [p-title]="task.taskData!.taskId">
+    <div class="po-md-4 po-sm-12">
+
       <po-info p-label="Descrição" [p-value]="task.taskData!.description"></po-info>
       <po-info [p-orientation]="orientation" p-label="Participantes" [p-value]="(task.taskData?.voters?.length || 0).toString()"></po-info>
       <po-info [p-orientation]="orientation" p-label="Total de votos" [p-value]="totalParticipantes"></po-info>
-      <po-info [p-orientation]="orientation" *ngIf="resultSize && !task.taskData!.voting" p-label="Resultado" [p-value]="resultSize"></po-info>
     </div>
-    <div class="po-md-6 po-sm-12">
+    <div  class="po-md-4">
+      <po-chart
+        [p-options]="{legend: false}"
+        [p-height]="200"
+        [p-series]="[
+          { label: 'Angular', data: 100 },
+          { label: 'React', data: 10 }
+        ]"
+      >
+      </po-chart>
+
+    </div>
+    <div class="po-md-4 po-sm-12">
       <div class="po-md-12">
         <po-button class="po-md-12" *ngIf="isCreator && !task.taskData!.voting" p-label="Refinar" (p-click)="plan()"> </po-button>
         <po-button class="po-md-12" *ngIf="!isCreator && task.taskData!.voting && !isInVotingRoom" p-label="Votar" (p-click)="vote()"> </po-button>
@@ -15,6 +26,7 @@
       </div>
       <div class="po-md-12 po-m-2" >
         <po-tag [p-type]="taskTag.type" [p-value]="taskTag.value"></po-tag>
+        <po-info [p-orientation]="orientation" *ngIf="resultSize && !task.taskData!.voting" p-label="Resultado" [p-value]="resultSize"></po-info>
       </div>
     </div>
   </po-container>

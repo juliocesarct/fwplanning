@@ -2,7 +2,7 @@ import { Component, ViewChild } from '@angular/core';
 import { FirebaseService } from '../../services/firebase.service';
 import { ActivatedRoute, Router } from '@angular/router';
 import { TaskModel, Task } from '../../models/task.model';
-import { PoModalAction, PoModalComponent, PoModule, PoNotificationService } from '@po-ui/ng-components';
+import { PoModalAction, PoModalComponent, PoModule, PoNotificationService, PoPageAction } from '@po-ui/ng-components';
 import { FormsModule, NgForm, ReactiveFormsModule } from '@angular/forms';
 import { TaskComponent } from '../task/task.component';
 import { CommonModule } from '@angular/common';
@@ -24,6 +24,7 @@ export class SessionTasksComponent {
   tasks: any;
   newTask: TaskModel = new TaskModel("","","",new Date(), new Date(),0,[],false);
   isCreator: boolean = false;
+  public readonly actions: Array<PoPageAction> = [{label: 'Adicionar nova tarefa', action: () => this.addTask()}];
 
   constructor(
     private firebaseService: FirebaseService,
@@ -53,6 +54,8 @@ export class SessionTasksComponent {
     }
 
     this.isCreator = this.userName == localStorage.getItem('creator')
+
+    this.actions[0].visible = this.isCreator;
 
     this.getTasks()
   }
