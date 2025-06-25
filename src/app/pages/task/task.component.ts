@@ -1,8 +1,8 @@
-import { Component, EventEmitter, Input, model, OnInit, Output } from '@angular/core';
+import { Component, Input, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Task, Voter } from '../../models/task.model';
 import { FirebaseService } from '../../services/firebase.service';
-import { PoModule, PoTagComponent } from '@po-ui/ng-components';
+import { PoInfoOrientation, PoModule, PoTagOrientation } from '@po-ui/ng-components';
 import { CommonModule } from '@angular/common';
 
 @Component({
@@ -21,6 +21,15 @@ export class TaskComponent implements OnInit {
   isInVotingRoom: boolean = false;
   resultSize: string | undefined;
   taskTag: any;
+  orientation: PoInfoOrientation = PoInfoOrientation.Horizontal;
+
+  get totalParticipantes(): string {
+    const voters = this.task?.taskData?.voters;
+    if (!Array.isArray(voters)) {
+      return '0';
+    }
+    return voters.filter(voter => voter.hasVoted).length.toString();
+  }
 
   constructor(
     private router: Router,
@@ -40,7 +49,7 @@ export class TaskComponent implements OnInit {
     this.sessionId = this.route.snapshot.paramMap.get('sessionId');
     this.isInVotingRoom = this.route.snapshot.url[0].path === "voting-room";
     this.task.taskData!.voters .forEach(voter => {
-      if(voter.hasVoted){
+      if(voter.hasVoted && voter.vote > 0){
         numberOfVotes++
         voteSum += voter.vote;
       }
@@ -72,7 +81,7 @@ export class TaskComponent implements OnInit {
           console.error('Erro ao atualizar task: ', error);
         });
 
-    this.router.navigate(['voting-room/',this.sessionId, this.task.id])
+    //this.router.navigate(['voting-room/',this.sessionId, this.task.id])
   }
 
   vote(){
@@ -103,12 +112,12 @@ export class TaskComponent implements OnInit {
     this.task.taskData!.voting = false;
 
     this.firebase.updateTask(this.task).then(
-        () => {
-          console.log('Task atualizada com sucesso!');
-        }).catch(error => {
-          console.error('Erro ao atualizar task: ', error);
-        });
-
+      () => {
+        console.log('Task atualizada com sucesso!');
+        this.router.navigate(['session/',this.sessionId])
+      }).catch(error => {
+        console.error('Erro ao atualizar task: ', error);
+      });
   }
 
 }

@@ -1,7 +1,7 @@
 <div class="po-row">
   <app-session-tasks class="po-md-3 po-lg-3"></app-session-tasks>
   <div class="po-md-9">
-    <h1 class="po-font-title">Votação:</h1>
+    <h1 class="po-font-title">Votação: {{task?.taskData?.taskId}}</h1>
       <div class="container-usuarios">
         <div *ngFor="let user of task?.taskData?.voters || []">
           <po-avatar
