@@ -6,9 +6,9 @@
 
         <p class="po-mb-5 po-mt-5">Olá, {{userName}}! Bem vindo a sessão de planning {{sessionName}}.</p>
 
-        <po-button *ngIf="isCreator" p-label="Adicionar tarefas" (p-click)="addTask()"> </po-button>
+        <po-button class="po-md-12" *ngIf="isCreator" p-kind="primary" p-label="Adicionar nova tarefa" (p-click)="addTask()"> </po-button>
 
-        <po-divider></po-divider>
+        <po-divider class="po-m-2"></po-divider>
 
         <app-task *ngFor="let task of tasks" [task]="task" [isCreator]="isCreator" ></app-task>
 

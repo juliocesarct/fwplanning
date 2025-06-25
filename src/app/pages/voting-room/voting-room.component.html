@@ -3,7 +3,7 @@
   <div class="po-md-9">
     <h1 class="po-font-title">Votação:</h1>
       <div class="container-usuarios">
-        <div *ngFor="let user of sessionUsers">
+        <div *ngFor="let user of task?.taskData?.voters || []">
           <po-avatar
             class="usuarios"
             [p-tooltip]="user.name"
@@ -37,14 +37,14 @@
       <div class="po-row po-mt-2">
         <div class="po-md-12 po-text-right">
 
-          <po-button
+          <po-button class="po-md-12"
             *ngIf="passoAtual !== 'Testes'"
             p-label="Avançar"
             (p-click)="next()"
             [p-disabled]="(passoAtual === 'Escopo' && !steps[0].answer ) || (passoAtual === 'Desenvolvimento' && !steps[1].answer)">
           </po-button>
 
-          <po-button
+          <po-button class="po-md-12"
             *ngIf="passoAtual == 'Testes'"
             p-label="Finalizar"
             p-kind="primary"

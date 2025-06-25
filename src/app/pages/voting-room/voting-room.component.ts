@@ -16,7 +16,6 @@ export class VotingRoomComponent implements OnInit {
 
   @ViewChild('meuStepper') meuStepper: PoStepperComponent | undefined;
 
-  sessionUsers: Array<Voter> = [];
   passoAtual: any;
   task: Task | undefined;
 
@@ -31,7 +30,6 @@ export class VotingRoomComponent implements OnInit {
       this.firebase.getTask(this.route.snapshot.paramMap.get('taskId')!).subscribe(
         data => {
           this.task = data
-          this.sessionUsers = this.task.taskData!.voters;
         },
         error => console.log(error)
       )

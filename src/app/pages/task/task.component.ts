@@ -2,7 +2,7 @@ import { Component, EventEmitter, Input, model, OnInit, Output } from '@angular/
 import { ActivatedRoute, Router } from '@angular/router';
 import { Task, Voter } from '../../models/task.model';
 import { FirebaseService } from '../../services/firebase.service';
-import { PoModule } from '@po-ui/ng-components';
+import { PoModule, PoTagComponent } from '@po-ui/ng-components';
 import { CommonModule } from '@angular/common';
 
 @Component({
@@ -20,6 +20,7 @@ export class TaskComponent implements OnInit {
   sessionId: string | null = null;
   isInVotingRoom: boolean = false;
   resultSize: string | undefined;
+  taskTag: any;
 
   constructor(
     private router: Router,
@@ -31,6 +32,11 @@ export class TaskComponent implements OnInit {
     var numberOfVotes = 0;
     var voteSum = 0;
 
+    if( this.task.taskData!.voting ) {
+      this.taskTag = {value: 'Em andamento', type: 'warning'}
+    } else {
+      this.taskTag = this.task.taskData!.result ? {value: 'Finalizado', type: 'success'} : {value: 'Pendente', type: 'danger'}
+    }
     this.sessionId = this.route.snapshot.paramMap.get('sessionId');
     this.isInVotingRoom = this.route.snapshot.url[0].path === "voting-room";
     this.task.taskData!.voters .forEach(voter => {

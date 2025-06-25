@@ -1,14 +1,19 @@
 <div class="po-m-2">
-  <po-container >
-    <div class="po-md-6 po-sm-3">
-      <h2>{{task.taskData!.taskId}}</h2>
-      <p>{{task.taskData!.description}}</p>
-      <p *ngIf="resultSize && !task.taskData!.voting">Resultado: {{resultSize}}</p>
+  <po-container>
+    <div class="po-md-6 po-sm-12">
+      <h2 class="po-mb-1">{{task.taskData!.taskId}}</h2>
+      <po-info p-label="Descrição:" [p-value]="task.taskData!.description"></po-info>
+      <po-info *ngIf="resultSize && !task.taskData!.voting" p-label="Resultado:" [p-value]="resultSize"></po-info>
     </div>
-    <div class="po-md-6 po-sm-9">
-      <po-button class="po-md-12" *ngIf="isCreator && !task.taskData!.voting" p-label="Refinar" (p-click)="plan()"> </po-button>
-      <po-button class="po-md-12" *ngIf="!isCreator && task.taskData!.voting && !isInVotingRoom" p-label="Votar" (p-click)="vote()"> </po-button>
-      <po-button class="po-md-12" p-kind="primary" *ngIf="isCreator && task.taskData!.voting" p-label="Finalizar" (p-click)="complete()"> </po-button>
+    <div class="po-md-6 po-sm-12">
+      <div class="po-md-12">
+        <po-button class="po-md-12" *ngIf="isCreator && !task.taskData!.voting" p-label="Refinar" (p-click)="plan()"> </po-button>
+        <po-button class="po-md-12" *ngIf="!isCreator && task.taskData!.voting && !isInVotingRoom" p-label="Votar" (p-click)="vote()"> </po-button>
+        <po-button class="po-md-12" p-kind="primary" *ngIf="isCreator && task.taskData!.voting" p-label="Finalizar" (p-click)="complete()"> </po-button>
+      </div>
+      <div class="po-md-12 po-m-2" >
+        <po-tag [p-type]="taskTag.type" [p-value]="taskTag.value"></po-tag>
+      </div>
     </div>
   </po-container>
 </div>
