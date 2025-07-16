@@ -15,12 +15,14 @@ import { initializeApp } from 'firebase/app';
 import { VotingRoomComponent } from './pages/voting-room/voting-room.component';
 import { SessionTasksComponent } from './pages/session-tasks/session-tasks.component';
 import { TaskComponent } from './pages/task/task.component';
+import { VotingResultComponent } from './pages/voting-result/voting-result.component';
 
 @NgModule({
   declarations: [
     AppComponent,
     CreateSessionComponent,
-    VotingRoomComponent
+    VotingRoomComponent,
+    VotingResultComponent
   ],
   imports: [
     BrowserModule,

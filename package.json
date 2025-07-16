@@ -21,6 +21,7 @@
     "@angular/router": "~19.0.0",
     "@po-ui/ng-components": "^19.11.0",
     "@totvs/po-theme": "^19.20.6",
+    "@totvs/themes": "^19.19.0",
     "rxjs": "~7.8.0",
     "tslib": "^2.3.0",
     "zone.js": "~0.15.0"

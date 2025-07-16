@@ -121,7 +121,8 @@ export class VotingRoomComponent implements OnInit {
 
     }
 
-    this.router.navigate(['/session', this.route.snapshot.paramMap.get('sessionId') ]);
+    this.router.navigate(['/voting-result', this.route.snapshot.paramMap.get('sessionId'), this.route.snapshot.paramMap.get('taskId') ]);
+    //this.router.navigate(['/session', this.route.snapshot.paramMap.get('sessionId') ]);
 
   }
 

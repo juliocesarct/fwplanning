@@ -17,11 +17,12 @@ export class TaskComponent implements OnInit {
   @Input() task!: Task;
   @Input() isCreator: boolean = false;
 
-  sessionId: string | null = null;
-  isInVotingRoom: boolean = false;
-  resultSize: string | undefined;
-  taskTag: any;
-  orientation: PoInfoOrientation = PoInfoOrientation.Horizontal;
+  private sessionId: string | null = null;
+  public isInVotingRoom: boolean = false;
+  public resultSize: string | undefined;
+  public taskTag: any;
+  public readonly orientation: PoInfoOrientation = PoInfoOrientation.Horizontal;
+  public votesBySize = [{label: 'P', data: 0},{label: 'M', data: 0},{label: 'G', data: 0}];
 
   get totalParticipantes(): string {
     const voters = this.task?.taskData?.voters;
@@ -52,6 +53,7 @@ export class TaskComponent implements OnInit {
       if(voter.hasVoted && voter.vote > 0){
         numberOfVotes++
         voteSum += voter.vote;
+        this.votesBySize[voter.vote-1].data += 1;
       }
     });
     const result = Math.round(voteSum / numberOfVotes);
