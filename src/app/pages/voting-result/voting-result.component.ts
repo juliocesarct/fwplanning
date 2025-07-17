@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { Task } from '../../models/task.model';
 import { FirebaseService } from '../../services/firebase.service';
 import { ActivatedRoute, Router } from '@angular/router';
+import { PoPageAction } from '@po-ui/ng-components';
 
 @Component({
   selector: 'app-voting-result',
@@ -12,7 +13,8 @@ import { ActivatedRoute, Router } from '@angular/router';
 })
 export class VotingResultComponent implements OnInit {
 
-  public task: Task | undefined;
+  public _task: Task | undefined;
+  public readonly actions: Array<PoPageAction> = [{label: 'Sair', action: () => this.goToSession()}];
 
   constructor(
     private firebase: FirebaseService,
@@ -28,6 +30,20 @@ export class VotingResultComponent implements OnInit {
         },
         error => console.log(error)
       )
+    }
+  }
+
+  set task(value: Task | undefined){
+    this._task = value;
+  }
+
+  get task(): Task | undefined{
+    return this._task
+  }
+
+  goToSession(){
+    if(!this._task?.taskData?.voting){
+      this.router.navigate(['/session', this.route.snapshot.paramMap.get('sessionId') ]);
     }
   }
 

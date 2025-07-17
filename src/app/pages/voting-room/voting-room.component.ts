@@ -109,6 +109,15 @@ export class VotingRoomComponent implements OnInit {
         if (voter.name === localStorage.getItem('user')) {
           voter.hasVoted = true;
           voter.vote = result;
+          if(result == 0){
+            voter.size = "?";
+          }else if(result == 1){
+            voter.size = "P";
+          }else if(result == 2){
+            voter.size = "M";
+          }else if(result == 3){
+            voter.size = "G";
+          }
         }
       }
 

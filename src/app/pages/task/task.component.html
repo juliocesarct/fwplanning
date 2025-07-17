@@ -1,9 +1,9 @@
 <div class="po-m-2">
-  <po-container [p-title]="task.taskData!.taskId">
+  <po-container [p-title]="task!.taskData!.taskId">
     <div class="po-md-4 po-sm-12">
 
-      <po-info p-label="Descrição" [p-value]="task.taskData!.description"></po-info>
-      <po-info [p-orientation]="orientation" p-label="Participantes" [p-value]="(task.taskData?.voters?.length || 0).toString()"></po-info>
+      <po-info p-label="Descrição" [p-value]="task!.taskData!.description"></po-info>
+      <po-info [p-orientation]="orientation" p-label="Participantes" [p-value]="(task?.taskData?.voters?.length || 0).toString()"></po-info>
       <po-info [p-orientation]="orientation" p-label="Total de votos" [p-value]="totalParticipantes"></po-info>
     </div>
     <div  class="po-md-4">
@@ -17,13 +17,13 @@
     </div>
     <div class="po-md-4 po-sm-12">
       <div class="po-md-12">
-        <po-button class="po-md-12" *ngIf="isCreator && !task.taskData!.voting" p-label="Refinar" (p-click)="plan()"> </po-button>
-        <po-button class="po-md-12" *ngIf="!isCreator && task.taskData!.voting && !isInVotingRoom" p-label="Votar" (p-click)="vote()"> </po-button>
-        <po-button class="po-md-12" p-kind="primary" *ngIf="isCreator && task.taskData!.voting" p-label="Finalizar" (p-click)="complete()"> </po-button>
+        <po-button class="po-md-12" *ngIf="isCreator && !task!.taskData!.voting" p-label="Refinar" (p-click)="plan()"> </po-button>
+        <po-button class="po-md-12" *ngIf="!isCreator && task!.taskData!.voting && !isInVotingRoom" p-label="Votar" (p-click)="vote()"> </po-button>
+        <po-button class="po-md-12" p-kind="primary" *ngIf="isCreator && task!.taskData!.voting" p-label="Finalizar" (p-click)="complete()"> </po-button>
       </div>
       <div class="po-md-12 po-m-2" >
         <po-tag [p-type]="taskTag.type" [p-value]="taskTag.value"></po-tag>
-        <po-info [p-orientation]="orientation" *ngIf="resultSize && !task.taskData!.voting" p-label="Resultado" [p-value]="resultSize"></po-info>
+        <po-info [p-orientation]="orientation" *ngIf="resultSize && !task!.taskData!.voting" p-label="Resultado" [p-value]="resultSize"></po-info>
       </div>
     </div>
   </po-container>

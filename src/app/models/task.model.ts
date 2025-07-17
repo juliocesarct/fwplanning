@@ -26,11 +26,13 @@ export class Voter{
   name: string;
   hasVoted: boolean;
   vote: number;
+  size: string;
 
-  constructor(name: string, hasVoted: boolean, vote:number){
+  constructor(name: string, hasVoted: boolean, vote: number, size: string){
     this.name = name;
     this.hasVoted = hasVoted;
     this.vote = vote;
+    this.size = size;
   }
 }
 

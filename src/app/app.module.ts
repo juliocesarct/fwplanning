@@ -16,13 +16,16 @@ import { VotingRoomComponent } from './pages/voting-room/voting-room.component';
 import { SessionTasksComponent } from './pages/session-tasks/session-tasks.component';
 import { TaskComponent } from './pages/task/task.component';
 import { VotingResultComponent } from './pages/voting-result/voting-result.component';
+import { HttpClient, HttpClientModule, provideHttpClient } from '@angular/common/http';
+import { CommonModule } from '@angular/common';
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 
 @NgModule({
   declarations: [
     AppComponent,
     CreateSessionComponent,
     VotingRoomComponent,
-    VotingResultComponent
+    VotingResultComponent,
   ],
   imports: [
     BrowserModule,
@@ -32,14 +35,17 @@ import { VotingResultComponent } from './pages/voting-result/voting-result.compo
     FormsModule,
     AngularFireModule.initializeApp(environment.firebaseConfig),
     RouterModule.forRoot([]),
-    SessionTasksComponent,
+    CommonModule,
     TaskComponent,
-    PoStepperModule,
+    SessionTasksComponent,
+    BrowserAnimationsModule
   ],
   providers: [
     provideZoneChangeDetection({eventCoalescing: true}),
     provideFirebaseApp(() => initializeApp(environment.firebaseConfig)),
     provideFirestore(() => getFirestore()),
+    provideHttpClient()
+
   ],
   bootstrap: [AppComponent]
 })

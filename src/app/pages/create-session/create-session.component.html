@@ -1,13 +1,15 @@
-<div class="po-wrapper po-row">
-  <div class="po-md-4"></div>
-  <div class="po-md-4">
-    <form [formGroup]="reactiveForm" (ngSubmit)="onClick()">
-      <div class="po-row po-mt-3">
-        <po-input class="po-md-12" formControlName="creator" p-clean p-icon="an an-user" p-label="User Name"> </po-input>
-        <po-input class="po-md-12 po-mt-2" formControlName="name" p-clean p-icon="an an-chalkboard-teacher" p-label="Session Name"> </po-input>
-      </div>
-      <po-button type="submit" [p-disabled]="reactiveForm.invalid" class="po-p-5 po-md-12" [p-label]="buttonLabel" (p-click)="onClick()" p-kind="primary"> </po-button>
-    </form>
+<po-page-default p-title="Criar/Acessar sessão">
+  <div class="po-row">
+    <div class="po-md-4"></div>
+    <div class="po-md-4">
+      <form [formGroup]="reactiveForm" (ngSubmit)="onClick()">
+        <div class="po-row po-mt-3">
+          <po-input class="po-md-12" formControlName="creator" p-clean p-icon="an an-user" p-label="User Name"> </po-input>
+          <po-input class="po-md-12 po-mt-2" formControlName="name" p-clean p-icon="an an-chalkboard-teacher" p-label="Session Name"> </po-input>
+        </div>
+        <po-button type="submit" [p-disabled]="reactiveForm.invalid" class="po-p-5 po-md-12" [p-label]="buttonLabel" (p-click)="onClick()" p-kind="primary"> </po-button>
+      </form>
+    </div>
+    <div class="po-md-4"></div>
   </div>
-  <div class="po-md-4"></div>
-</div>
+</po-page-default>

@@ -14,7 +14,7 @@ import { CommonModule } from '@angular/common';
 })
 export class TaskComponent implements OnInit {
 
-  @Input() task!: Task;
+  @Input() task: undefined | Task;
   @Input() isCreator: boolean = false;
 
   private sessionId: string | null = null;
@@ -42,14 +42,14 @@ export class TaskComponent implements OnInit {
     var numberOfVotes = 0;
     var voteSum = 0;
 
-    if( this.task.taskData!.voting ) {
+    if( this.task?.taskData?.voting ?? false ) {
       this.taskTag = {value: 'Em andamento', type: 'warning'}
     } else {
-      this.taskTag = this.task.taskData!.result ? {value: 'Finalizado', type: 'success'} : {value: 'Pendente', type: 'danger'}
+      this.taskTag = this.task?.taskData?.result ? {value: 'Finalizado', type: 'success'} : {value: 'Pendente', type: 'danger'}
     }
     this.sessionId = this.route.snapshot.paramMap.get('sessionId');
     this.isInVotingRoom = this.route.snapshot.url[0].path === "voting-room";
-    this.task.taskData!.voters .forEach(voter => {
+    this.task?.taskData?.voters .forEach(voter => {
       if(voter.hasVoted && voter.vote > 0){
         numberOfVotes++
         voteSum += voter.vote;
@@ -66,17 +66,17 @@ export class TaskComponent implements OnInit {
       this.resultSize = "G"
     }
 
-    this.task.taskData!.result = result;
+    this.task!.taskData!.result = result;
 
   }
 
   plan(){
 
     localStorage.setItem('voting','true')
-    this.task.taskData!.voting = true;
-    this.task.taskData!.updatedAt = new Date();
+    this.task!.taskData!.voting = true;
+    this.task!.taskData!.updatedAt = new Date();
 
-    this.firebase.updateTask(this.task).then(
+    this.firebase.updateTask(this.task!).then(
         () => {
           console.log('Task atualizada com sucesso!');
         }).catch(error => {
@@ -88,16 +88,16 @@ export class TaskComponent implements OnInit {
 
   vote(){
 
-    const voter: Voter = new Voter(localStorage.getItem('user')!,false,0);
-    const canPushVoter = !this.task.taskData!.voters.some(
+    const voter: Voter = new Voter(localStorage.getItem('user')!,false,0,'?');
+    const canPushVoter = !this.task!.taskData!.voters.some(
       (existingVoter) => existingVoter.name === voter.name
     );
 
     if(canPushVoter){
-      this.task.taskData!.updatedAt = new Date();
-      this.task.taskData!.voters.push(voter)
+      this.task!.taskData!.updatedAt = new Date();
+      this.task!.taskData!.voters.push(voter)
 
-      this.firebase.updateTask(this.task).then(
+      this.firebase.updateTask(this.task!).then(
         (data) => {
           console.log('Task atualizada com sucesso!'+data);
         }).catch(error => {
@@ -105,15 +105,15 @@ export class TaskComponent implements OnInit {
         });
     }
 
-    this.router.navigate(['voting-room/',this.sessionId, this.task.id])
+    this.router.navigate(['voting-room/',this.sessionId, this.task!.id])
   }
 
   complete(){
     localStorage.setItem('voting','false');
-    this.task.taskData!.updatedAt = new Date();
-    this.task.taskData!.voting = false;
+    this.task!.taskData!.updatedAt = new Date();
+    this.task!.taskData!.voting = false;
 
-    this.firebase.updateTask(this.task).then(
+    this.firebase.updateTask(this.task!).then(
       () => {
         console.log('Task atualizada com sucesso!');
         this.router.navigate(['session/',this.sessionId])
