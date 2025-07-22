@@ -1,6 +1,6 @@
 <po-page-default p-title="Resultado" [p-actions]="actions">
 
-  <po-loading-overlay *ngIf="task?.taskData?.voting ?? true" [p-screen-lock]="true" p-text="Aguarde o fim da votação para ver o resultado" ></po-loading-overlay>
+  <po-loading-overlay *ngIf="(task?.taskData?.voting ?? true)" [p-screen-lock]="true" p-text="Aguarde o fim da votação" ></po-loading-overlay>
   <app-task *ngIf="task" [isCreator]="false" [task]="task!"></app-task>
   <po-table [p-items]="task?.taskData?.voters ?? []" [p-columns]="[{ property: 'name', label: 'Nome'},{ property: 'size', label: 'Tamanho'}]"> </po-table>
 

@@ -22,9 +22,9 @@ export class SessionTasksComponent {
   sessionName = localStorage.getItem("sessionName")
   sessionId: string | null = "";
   tasks: any;
-  newTask: TaskModel = new TaskModel("","","",new Date(), new Date(),0,[],false);
+  newTask: TaskModel = new TaskModel("","","",new Date(), new Date(),0,[],false,false);
   isCreator: boolean = false;
-  public readonly actions: Array<PoPageAction> = [{label: 'Adicionar nova tarefa', action: () => this.addTask()}];
+  public readonly actions: Array<PoPageAction> = [{label: 'Adicionar nova tarefa', action: () => this.addTask()}, {label:'Sair da sessão', action: () => this.logout()}];
 
   constructor(
     private firebaseService: FirebaseService,
@@ -62,16 +62,16 @@ export class SessionTasksComponent {
 
   addNewTask() {
     if (this.form.invalid) {
-      const InvalidMessage = 'Choose the items to confirm the teste.';
+      const InvalidMessage = 'Verifique os campos';
       this.poNotification.warning(InvalidMessage);
     } else {
       this.confirm.loading = true;
       this.newTask.sessionId = this.sessionId!
       this.firebaseService.addTask(this.newTask).then(
-      (data) => {
+      () => {
         this.poNotification.success(`Task adicionada com sucesso!`);
         this.confirm.loading = false;
-        this.form.reset(); // Resetando o formulário após o envio
+        this.form.reset();
         this.closeModal();
 
       }).catch(error => {
@@ -86,6 +86,11 @@ export class SessionTasksComponent {
         this.tasks = data;
       }
     );
+  }
+
+  logout(){
+    localStorage.clear()
+    this.router.navigate(['createsession'])
   }
 
   addTask() {

@@ -41,9 +41,15 @@ export class VotingResultComponent implements OnInit {
     return this._task
   }
 
+  voteAgain(){
+    this.router.navigate(['voting-room/',this.route.snapshot.paramMap.get('sessionId'), this.route.snapshot.paramMap.get('taskId')])
+  }
+
   goToSession(){
-    if(!this._task?.taskData?.voting){
+    if(this._task?.taskData?.complete){
       this.router.navigate(['/session', this.route.snapshot.paramMap.get('sessionId') ]);
+    }else{
+      console.log('aguarde a conclusão')
     }
   }
 

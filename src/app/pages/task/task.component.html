@@ -17,14 +17,30 @@
     </div>
     <div class="po-md-4 po-sm-12">
       <div class="po-md-12">
-        <po-button class="po-md-12" *ngIf="isCreator && !task!.taskData!.voting" p-label="Refinar" (p-click)="plan()"> </po-button>
+        <po-button class="po-md-12" *ngIf="isCreator && !task!.taskData!.voting && !task!.taskData!.complete" p-label="Refinar" (p-click)="plan()"> </po-button>
         <po-button class="po-md-12" *ngIf="!isCreator && task!.taskData!.voting && !isInVotingRoom" p-label="Votar" (p-click)="vote()"> </po-button>
-        <po-button class="po-md-12" p-kind="primary" *ngIf="isCreator && task!.taskData!.voting" p-label="Finalizar" (p-click)="complete()"> </po-button>
+        <po-button class="po-md-12" p-kind="primary" *ngIf="isCreator && task!.taskData!.voting " [p-label]="'Finalizar votação'" (p-click)="complete()"> </po-button>
+        <po-button class="po-md-12" p-kind="primary" *ngIf="isCreator && resultSize && !task!.taskData!.voting && !task!.taskData!.complete" [p-label]="'Concluir'" (p-click)="complete()"> </po-button>
       </div>
       <div class="po-md-12 po-m-2" >
         <po-tag [p-type]="taskTag.type" [p-value]="taskTag.value"></po-tag>
         <po-info [p-orientation]="orientation" *ngIf="resultSize && !task!.taskData!.voting" p-label="Resultado" [p-value]="resultSize"></po-info>
+        <po-button *ngIf="resultSize && !task!.taskData!.voting && !task!.taskData!.complete" p-label="Ajustar resultado"></po-button>
       </div>
     </div>
   </po-container>
+
+  <po-modal p-title="Options" [p-primary-action]="confirm" [p-secondary-action]="close">
+
+    <div class="po-row">
+        <po-select class="po-md-12" name="taskId"  p-label="Novo resultado a ser definido">
+        </po-select>
+    </div>
+
+    <po-modal-footer [p-disabled-align]="false">
+        <po-button p-danger="true" p-label="Close" (p-click)="closeModal()"> </po-button>
+        <po-button p-kind="primary" p-label="Confirm" (p-click)="setNewResult()"> </po-button>
+    </po-modal-footer>
+
+  </po-modal>
 </div>

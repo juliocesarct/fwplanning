@@ -7,9 +7,10 @@ export class TaskModel {
   result: number;
   voters: Array<Voter>;
   voting: boolean;
+  complete: boolean;
 
 
-  constructor(sessionId: string, taskId: string, description: string, createdAt: Date, updatedAt: Date, result: number, voters: Array<Voter>, voting: boolean) {
+  constructor(sessionId: string, taskId: string, description: string, createdAt: Date, updatedAt: Date, result: number, voters: Array<Voter>, voting: boolean, complete: boolean) {
     this.sessionId = sessionId;
     this.taskId = taskId;
     this.description = description;
@@ -18,6 +19,7 @@ export class TaskModel {
     this.result = result;
     this.voters = voters;
     this.voting = false;
+    this.complete = false;
 
   }
 }

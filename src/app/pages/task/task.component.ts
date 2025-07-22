@@ -2,7 +2,7 @@ import { Component, Input, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Task, Voter } from '../../models/task.model';
 import { FirebaseService } from '../../services/firebase.service';
-import { PoInfoOrientation, PoModule, PoTagOrientation } from '@po-ui/ng-components';
+import { PoInfoOrientation, PoModalAction, PoModule } from '@po-ui/ng-components';
 import { CommonModule } from '@angular/common';
 
 @Component({
@@ -23,6 +23,7 @@ export class TaskComponent implements OnInit {
   public taskTag: any;
   public readonly orientation: PoInfoOrientation = PoInfoOrientation.Horizontal;
   public votesBySize = [{label: 'P', data: 0},{label: 'M', data: 0},{label: 'G', data: 0}];
+  public newResult: string | undefined;
 
   get totalParticipantes(): string {
     const voters = this.task?.taskData?.voters;
@@ -45,7 +46,7 @@ export class TaskComponent implements OnInit {
     if( this.task?.taskData?.voting ?? false ) {
       this.taskTag = {value: 'Em andamento', type: 'warning'}
     } else {
-      this.taskTag = this.task?.taskData?.result ? {value: 'Finalizado', type: 'success'} : {value: 'Pendente', type: 'danger'}
+      this.taskTag = this.task?.taskData?.complete ?? false ? {value: 'Finalizado', type: 'success'} : {value: 'Pendente', type: 'danger'}
     }
     this.sessionId = this.route.snapshot.paramMap.get('sessionId');
     this.isInVotingRoom = this.route.snapshot.url[0].path === "voting-room";
@@ -109,8 +110,14 @@ export class TaskComponent implements OnInit {
   }
 
   complete(){
+
+    if(!this.task!.taskData!.voting && !this.task!.taskData!.complete){
+      this.task!.taskData!.complete = true;
+    }
+
     localStorage.setItem('voting','false');
     this.task!.taskData!.updatedAt = new Date();
+
     this.task!.taskData!.voting = false;
 
     this.firebase.updateTask(this.task!).then(
@@ -122,4 +129,26 @@ export class TaskComponent implements OnInit {
       });
   }
 
+  closeModal(){
+
+  }
+
+  setNewResult(){
+
+  }
+
+  close: PoModalAction = {
+    action: () => {
+      this.closeModal();
+    },
+    label: 'Close',
+    danger: true
+  };
+
+  confirm: PoModalAction = {
+    action: () => {
+      this.setNewResult();
+    },
+    label: 'Confirm'
+  };
 }

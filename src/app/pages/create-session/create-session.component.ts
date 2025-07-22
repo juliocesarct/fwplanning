@@ -37,18 +37,29 @@ export class CreateSessionComponent implements OnInit {
   ngOnInit(): void {
       this.route.paramMap.subscribe(params => {
       this.sessionId = params.get('sessionId');
+
+      if( !this.sessionId && localStorage.getItem("session") ){
+        this.sessionId = localStorage.getItem("session");
+      }
+
       this.firebaseService.getSession(this.sessionId!).subscribe(
-          (data) => {
-            if(data){
-              localStorage.setItem('sessionName', data.sessionData.name )
-              localStorage.setItem("session",this.sessionId!)
-              localStorage.setItem("creator",data.sessionData.creator)
-              localStorage.setItem("sessionName",data.sessionData.name)
+        (data) => {
+          if(data){
+            localStorage.setItem('sessionName', data.sessionData.name )
+            localStorage.setItem("session",this.sessionId!)
+            localStorage.setItem("creator",data.sessionData.creator)
+            localStorage.setItem("sessionName",data.sessionData.name)
+
+            if(localStorage.getItem("user")){
+              this.router.navigate(['/session', this.sessionId]);
             }
 
-          },
-          (error) => {console.log(error)}
+          }
+
+        },
+        (error) => {console.log(error)}
       )
+
     });
 
     if (this.sessionId){
