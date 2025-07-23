@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, inject, OnInit } from '@angular/core';
 import { Task } from '../../models/task.model';
 import { FirebaseService } from '../../services/firebase.service';
 import { ActivatedRoute, Router } from '@angular/router';
@@ -14,16 +14,14 @@ import { PoNotificationService, PoPageAction } from '@po-ui/ng-components';
 export class VotingResultComponent implements OnInit {
 
   public _task: Task | undefined;
-  public readonly actions: Array<PoPageAction> = [{label: 'Sair', action: () => this.goToSession()}];
+  public readonly actions: PoPageAction[] = [{label: 'Sair', action: () => this.goToSession()}];
   public readonly userName: string = localStorage.getItem("user") ?? "";
   public readonly sessionName: string = localStorage.getItem("session") ?? "";
 
-  constructor(
-    private firebase: FirebaseService,
-    private route: ActivatedRoute,
-    private router: Router,
-    private poNotification: PoNotificationService
-  ){}
+  private firebase = inject(FirebaseService);
+  private route = inject(ActivatedRoute);
+  private router = inject(Router);
+  private poNotification = inject(PoNotificationService);
 
   ngOnInit(){
     if(this.route.snapshot.paramMap.get('taskId')){

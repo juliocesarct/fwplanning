@@ -1,4 +1,4 @@
-import { Component, ViewChild } from '@angular/core';
+import { Component, ViewChild, OnInit, inject } from '@angular/core';
 import { FirebaseService } from '../../services/firebase.service';
 import { ActivatedRoute, Router } from '@angular/router';
 import { TaskModel, Task } from '../../models/task.model';
@@ -14,7 +14,7 @@ import { CommonModule } from '@angular/common';
   templateUrl: './session-tasks.component.html',
   styleUrl: './session-tasks.component.css'
 })
-export class SessionTasksComponent {
+export class SessionTasksComponent implements OnInit {
   @ViewChild('optionsForm', { static: true }) form!: NgForm;
   @ViewChild(PoModalComponent, { static: true }) poModal!: PoModalComponent;
 
@@ -23,15 +23,13 @@ export class SessionTasksComponent {
   sessionId: string | null = "";
   tasks: any;
   newTask: TaskModel = new TaskModel("","","",new Date(), new Date(),0,[],false,false);
-  isCreator: boolean = false;
-  public readonly actions: Array<PoPageAction> = [{label: 'Adicionar nova tarefa', action: () => this.addTask()}, {label:'Sair da sessão', action: () => this.logout()}];
+  isCreator = false;
+  public readonly actions: PoPageAction[] = [{label: 'Adicionar nova tarefa', action: () => this.addTask()}, {label:'Sair da sessão', action: () => this.logout()}];
 
-  constructor(
-    private firebaseService: FirebaseService,
-    private route: ActivatedRoute,
-    private router: Router,
-    private poNotification: PoNotificationService
-  ) { }
+  private firebaseService = inject(FirebaseService);
+  private route = inject(ActivatedRoute);
+  private router = inject(Router);
+  private poNotification = inject(PoNotificationService);
 
   ngOnInit() {
     this.sessionId = this.route.snapshot.paramMap.get('sessionId');

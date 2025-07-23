@@ -1,5 +1,5 @@
-import { Injectable } from '@angular/core';
-import { addDoc, collection, collectionData, doc, docData, Firestore, getDocs, query, updateDoc, where } from '@angular/fire/firestore';
+import { inject, Injectable } from '@angular/core';
+import { addDoc, collection, collectionData, doc, docData, DocumentData, Firestore, query, updateDoc, where } from '@angular/fire/firestore';
 import { Observable } from 'rxjs';
 import { Session, SessionModel } from '../models/session.model';
 import { TaskModel, Task } from '../models/task.model';
@@ -9,16 +9,16 @@ import { TaskModel, Task } from '../models/task.model';
 })
 export class FirebaseService {
 
-  constructor(private firestore: Firestore) { }
+  private firestore = inject(Firestore)
 
   // Método para adicionar uma nova sessão
-  addSession(sessionData: SessionModel): Promise<any> {
+  addSession(sessionData: SessionModel): Promise<DocumentData> {
     sessionData.createdAt = new Date();
     return addDoc(collection(this.firestore,'session'),{ sessionData } );
   }
 
   // Método para adicionar uma nova task
-  addTask(taskData: TaskModel): Promise<any> {
+  addTask(taskData: TaskModel): Promise<DocumentData> {
     taskData.createdAt = new Date();
     taskData = Object.assign({}, taskData);
     return addDoc(collection(this.firestore,'tasks'),{ taskData } );

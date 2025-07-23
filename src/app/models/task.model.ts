@@ -5,12 +5,12 @@ export class TaskModel {
   createdAt: Date;
   updatedAt: Date;
   result: number;
-  voters: Array<Voter>;
+  voters: Voter[];
   voting: boolean;
   complete: boolean;
 
 
-  constructor(sessionId: string, taskId: string, description: string, createdAt: Date, updatedAt: Date, result: number, voters: Array<Voter>, voting: boolean, complete: boolean) {
+  constructor(sessionId: string, taskId: string, description: string, createdAt: Date, updatedAt: Date, result: number, voters: Voter[], voting: boolean, complete: boolean) {
     this.sessionId = sessionId;
     this.taskId = taskId;
     this.description = description;

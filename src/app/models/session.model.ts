@@ -10,7 +10,6 @@ export class SessionModel {
     this.creator = creator;
     this.createdAt = createdAt;
     this.currentTask = "";
-
   }
 }
 

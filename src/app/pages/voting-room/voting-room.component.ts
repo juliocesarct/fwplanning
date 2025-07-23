@@ -1,9 +1,8 @@
-import { Component, OnInit, ViewChild } from '@angular/core';
-import { NgForm } from '@angular/forms';
+import { Component, inject, OnInit, ViewChild } from '@angular/core';
 import { PoRadioGroupOption, PoStepperComponent, PoStepComponent, PoNotificationService } from '@po-ui/ng-components';
 import { FirebaseService } from '../../services/firebase.service';
 import { ActivatedRoute, Router } from '@angular/router';
-import { Task, Voter } from '../../models/task.model';
+import { Task } from '../../models/task.model';
 
 @Component({
   selector: 'app-voting-room',
@@ -16,15 +15,12 @@ export class VotingRoomComponent implements OnInit {
 
   @ViewChild('meuStepper') meuStepper: PoStepperComponent | undefined;
 
-  passoAtual: any;
-  task: Task | undefined;
-
-  constructor(
-    private firebase: FirebaseService,
-    private route: ActivatedRoute,
-    private router: Router,
-    private poNotification: PoNotificationService
-  ){}
+  public passoAtual: string | number | PoStepComponent | undefined;
+  public task: Task | undefined;
+  private firebase = inject(FirebaseService);
+  private route = inject(ActivatedRoute);
+  private router = inject(Router);
+  private poNotification = inject(PoNotificationService);
 
   ngOnInit(): void {
     if(this.route.snapshot.paramMap.get('taskId')){
@@ -38,7 +34,7 @@ export class VotingRoomComponent implements OnInit {
   }
 
   // Opções para o radio group do Passo 1
-  readonly objectiveOptions: Array<PoRadioGroupOption> = [
+  readonly objectiveOptions: PoRadioGroupOption[] = [
     { label: 'P - Muito claro com pouca chance de alteração', value: 1 },
     { label: 'M - Claro com alguma chance de alteração', value: 2 },
     { label: 'G - Pouco claro com alta chance de alteração', value: 3 },
@@ -46,7 +42,7 @@ export class VotingRoomComponent implements OnInit {
   ];
 
   // Opções para o radio group do Passo 2
-  readonly developmentOptions: Array<PoRadioGroupOption> = [
+  readonly developmentOptions: PoRadioGroupOption[] = [
     { label: 'P - Complexidade Baixa', value: 1 },
     { label: 'M - Complexidade Média', value: 2 },
     { label: 'G - Complexidade Alta', value: 3 },
@@ -54,14 +50,14 @@ export class VotingRoomComponent implements OnInit {
   ];
 
   // Opções para o radio group do Passo 3
-  readonly testsOptions: Array<PoRadioGroupOption> = [
+  readonly testsOptions: PoRadioGroupOption[] = [
     { label: 'P - Complexidade Baixa', value: 1 },
     { label: 'M - Complexidade Média', value: 2 },
     { label: 'G - Complexidade Alta', value: 3 },
     { label: '? - Não consigo opinar', value: -1 }
   ];
 
-  steps: Array<any> = [
+  steps: any[] = [
     { label: 'Escopo',
       id: '1',
       values: ['Houve um completo entendimento de todo escopo dessa história?', 'Enxerga a possibilidade de precisar refinar melhor o como a tarefa será realizada?', 'Acredita que a história em questão possa trazer novas demandas como o adaptação de funcionalidades pré-existentes?'],
@@ -82,7 +78,7 @@ export class VotingRoomComponent implements OnInit {
     },
   ];
 
-  atualizarPassoAtual(step: PoStepComponent | number) {
+  atualizarPassoAtual(step: string | PoStepComponent | number) {
      typeof step === 'object' ? this.passoAtual = step.label : this.passoAtual = step;
   }
 
@@ -92,9 +88,9 @@ export class VotingRoomComponent implements OnInit {
 
   // Função que será executada ao clicar em "Finalizar" no stepper
   finalizarAcao() {
-    var questions = this.steps.length;
-    var points = 0;
-    var result = 0
+    let questions = this.steps.length;
+    let points = 0;
+    let result = 0
 
     if(this.task?.taskData?.voting){
 

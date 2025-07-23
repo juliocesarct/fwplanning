@@ -1,4 +1,4 @@
-import { Component, OnInit, ViewChild } from '@angular/core';
+import { Component, inject, OnInit, ViewChild } from '@angular/core';
 import { UntypedFormBuilder, UntypedFormGroup, Validators } from '@angular/forms';
 
 import { PoModalAction, PoModalComponent } from '@po-ui/ng-components';
@@ -17,7 +17,12 @@ export class CreateSessionComponent implements OnInit {
 
   reactiveForm!: UntypedFormGroup;
   sessionId: string | null | undefined;
-  buttonLabel: string = "Criar sessão"
+  buttonLabel = "Criar sessão";
+
+  private fb = inject(UntypedFormBuilder);
+  private firebaseService = inject(FirebaseService);
+  private router = inject(Router);
+  private route = inject(ActivatedRoute);
 
   public readonly modalPrimaryAction: PoModalAction = {
     action: () => this.reactiveFormModal.close(),
@@ -25,14 +30,8 @@ export class CreateSessionComponent implements OnInit {
   };
 
   constructor(
-    private fb: UntypedFormBuilder,
-    private firebaseService: FirebaseService,
-    private router: Router,
-    private route: ActivatedRoute
   ) {
-
     this.createReactiveForm();
-
   }
   ngOnInit(): void {
       this.route.paramMap.subscribe(params => {
@@ -88,12 +87,12 @@ export class CreateSessionComponent implements OnInit {
         this.firebaseService.addSession(sessionData).then(
         (data) => { console.log('Sessão adicionada com sucesso!'+data);
 
-          localStorage.setItem("session",data.id)
+          localStorage.setItem("session",data['id'])
           localStorage.setItem("user",sessionData.creator)
           localStorage.setItem("creator",sessionData.creator)
           localStorage.setItem("sessionName",sessionData.name)
 
-          this.router.navigate(['/session', data.id]);
+          this.router.navigate(['/session', data['id']]);
 
           this.reactiveForm.reset(); // Resetando o formulário após o envio
         }).catch(error => {

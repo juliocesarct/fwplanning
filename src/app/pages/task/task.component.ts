@@ -1,4 +1,4 @@
-import { Component, Input, OnInit, ViewChild } from '@angular/core';
+import { Component, inject, Input, OnInit, ViewChild } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Task, Voter } from '../../models/task.model';
 import { FirebaseService } from '../../services/firebase.service';
@@ -16,15 +16,20 @@ import { FormsModule } from '@angular/forms';
 export class TaskComponent implements OnInit {
   @ViewChild(PoModalComponent, { static: true }) poModal!: PoModalComponent;
   @Input() task: undefined | Task;
-  @Input() isCreator: boolean = false;
+  @Input() isCreator = false;
 
   private sessionId: string | null = null;
-  public isInVotingRoom: boolean = false;
+  public isInVotingRoom = false;
   public resultSize: string | undefined;
   public taskTag: any;
   public readonly orientation: PoInfoOrientation = PoInfoOrientation.Horizontal;
   public votesBySize = [{label: 'P', data: 0},{label: 'M', data: 0},{label: 'G', data: 0}];
-  newResult: number | undefined;
+  public newResult: number | undefined;
+
+  private router = inject(Router);
+  private route = inject(ActivatedRoute);
+  private firebase = inject(FirebaseService);
+  private poNotification = inject(PoNotificationService);
 
   get totalParticipantes(): string {
     const voters = this.task?.taskData?.voters;
@@ -34,25 +39,18 @@ export class TaskComponent implements OnInit {
     return voters.filter(voter => voter.hasVoted).length.toString();
   }
 
-  constructor(
-    private router: Router,
-    private route: ActivatedRoute,
-    private firebase: FirebaseService,
-    private poNotification: PoNotificationService
-  ){}
-
   ngOnInit(): void {
 
-    if( this.task?.taskData?.voting ?? false ) {
+    if( (this.task?.taskData?.voting ?? false) || (this.task?.taskData?.result && !this.task?.taskData?.complete) ) {
       this.taskTag = {value: 'Em andamento', type: 'warning'}
     } else {
       this.taskTag = this.task?.taskData?.complete ?? false ? {value: 'Finalizado', type: 'success'} : {value: 'Pendente', type: 'danger'}
     }
     this.sessionId = this.route.snapshot.paramMap.get('sessionId');
 
-    if((this.task?.taskData?.result ?? 0) <= 1){
+    if((this.task?.taskData?.result) == 1){
       this.resultSize = "P"
-    }else if((this.task?.taskData?.result ?? 0) == 2){
+    }else if((this.task?.taskData?.result ) == 2){
       this.resultSize = "M"
     }else if((this.task?.taskData?.result ?? 0) >= 3){
       this.resultSize = "G"
@@ -106,8 +104,8 @@ export class TaskComponent implements OnInit {
 
   complete(){
 
-    var numberOfVotes = 0;
-    var voteSum = 0;
+    const numberOfVotes = 0;
+    const voteSum = 0;
 
     if(!this.task!.taskData!.voting && !this.task!.taskData!.complete){
       this.task!.taskData!.complete = true;
