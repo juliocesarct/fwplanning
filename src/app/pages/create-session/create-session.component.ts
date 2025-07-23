@@ -48,11 +48,6 @@ export class CreateSessionComponent implements OnInit {
             localStorage.setItem('sessionName', data.sessionData.name )
             localStorage.setItem("session",this.sessionId!)
             localStorage.setItem("creator",data.sessionData.creator)
-            localStorage.setItem("sessionName",data.sessionData.name)
-
-            if(localStorage.getItem("user")){
-              this.router.navigate(['/session', this.sessionId]);
-            }
 
           }
 
@@ -62,7 +57,9 @@ export class CreateSessionComponent implements OnInit {
 
     });
 
-    if (this.sessionId){
+    if(localStorage.getItem("user") && this.sessionId){
+      this.router.navigate(['/session', this.sessionId]);
+    }else if (this.sessionId){
       this.buttonLabel = "Acessar sessão"
       this.reactiveForm.patchValue({name: this.sessionId})
     }

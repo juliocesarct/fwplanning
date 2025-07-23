@@ -1,6 +1,6 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { NgForm } from '@angular/forms';
-import { PoRadioGroupOption, PoStepperComponent, PoStepComponent } from '@po-ui/ng-components';
+import { PoRadioGroupOption, PoStepperComponent, PoStepComponent, PoNotificationService } from '@po-ui/ng-components';
 import { FirebaseService } from '../../services/firebase.service';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Task, Voter } from '../../models/task.model';
@@ -22,7 +22,8 @@ export class VotingRoomComponent implements OnInit {
   constructor(
     private firebase: FirebaseService,
     private route: ActivatedRoute,
-    private router: Router
+    private router: Router,
+    private poNotification: PoNotificationService
   ){}
 
   ngOnInit(): void {
@@ -31,7 +32,7 @@ export class VotingRoomComponent implements OnInit {
         data => {
           this.task = data
         },
-        error => console.log(error)
+        error => this.poNotification.error(error)
       )
     }
   }
@@ -123,15 +124,14 @@ export class VotingRoomComponent implements OnInit {
 
       this.firebase.updateTask(this.task!).then(
       () => {
-        console.log('Task atualizada com sucesso!');
+        //this.poNotification.success('Task atualizada com sucesso!');
       }).catch(error => {
-        console.error('Erro ao atualizar task: ', error);
+        this.poNotification.error(error);
       });
 
     }
 
     this.router.navigate(['/voting-result', this.route.snapshot.paramMap.get('sessionId'), this.route.snapshot.paramMap.get('taskId') ]);
-    //this.router.navigate(['/session', this.route.snapshot.paramMap.get('sessionId') ]);
 
   }
 

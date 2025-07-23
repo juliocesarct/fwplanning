@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { Task } from '../../models/task.model';
 import { FirebaseService } from '../../services/firebase.service';
 import { ActivatedRoute, Router } from '@angular/router';
-import { PoPageAction } from '@po-ui/ng-components';
+import { PoNotificationService, PoPageAction } from '@po-ui/ng-components';
 
 @Component({
   selector: 'app-voting-result',
@@ -15,11 +15,14 @@ export class VotingResultComponent implements OnInit {
 
   public _task: Task | undefined;
   public readonly actions: Array<PoPageAction> = [{label: 'Sair', action: () => this.goToSession()}];
+  public readonly userName: string = localStorage.getItem("user") ?? "";
+  public readonly sessionName: string = localStorage.getItem("session") ?? "";
 
   constructor(
     private firebase: FirebaseService,
     private route: ActivatedRoute,
-    private router: Router
+    private router: Router,
+    private poNotification: PoNotificationService
   ){}
 
   ngOnInit(){
@@ -49,7 +52,7 @@ export class VotingResultComponent implements OnInit {
     if(this._task?.taskData?.complete){
       this.router.navigate(['/session', this.route.snapshot.paramMap.get('sessionId') ]);
     }else{
-      console.log('aguarde a conclusão')
+      this.poNotification.warning('Aguarde a conclusão')
     }
   }
 
