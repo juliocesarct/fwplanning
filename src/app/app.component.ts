@@ -1,6 +1,6 @@
 import { CommonModule } from '@angular/common';
 import { Component, inject } from '@angular/core';
-import { RouterLink, RouterLinkActive, RouterOutlet } from '@angular/router';
+import { RouterOutlet } from '@angular/router';
 
 import { PoModule, PoThemeA11yEnum } from '@po-ui/ng-components';
 import { ThfThemeService, poThemeTotvs } from '@totvs/themes';
