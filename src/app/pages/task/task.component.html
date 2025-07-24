@@ -8,30 +8,45 @@
       <po-info [p-orientation]="orientation" p-label="Total de votos" [p-value]="totalParticipantes"></po-info>
     </div>
     <div class="po-md-4">
-
-      <po-chart *ngIf="isCreator || !task?.taskData?.voting"
-        [p-options]="{legend: false}"
-        [p-height]="200"
-        [p-series]="votesBySize"
-      >
-      </po-chart>
-
+      @if(isCreator || !task?.taskData?.voting){
+        <po-chart
+          [p-options]="{legend: false}"
+          [p-height]="200"
+          [p-series]="votesBySize"
+        >
+        </po-chart>
+      }
     </div>
     <div class="po-md-4 po-sm-12">
       <div class="po-md-12">
-        <po-button class="po-md-12" *ngIf="isCreator && !task!.taskData!.voting && !task!.taskData!.complete" [p-label]="resultSize ? 'Nova votação' : 'Refinar'" (p-click)="plan()"> </po-button>
-        <po-button class="po-md-12" *ngIf="!isCreator && task!.taskData!.voting && !isInVotingRoom" p-label="Votar" (p-click)="vote()"> </po-button>
-        <po-button class="po-md-12" p-kind="primary" *ngIf="isCreator && task!.taskData!.voting " [p-label]="'Finalizar votação'" (p-click)="complete()"> </po-button>
-        <po-button class="po-md-12 po-mt-1" p-kind="primary" *ngIf="isCreator && resultSize && !task!.taskData!.voting && !task!.taskData!.complete" [p-label]="'Concluir'" (p-click)="complete()"> </po-button>
+        @if(isCreator){
+          @if(!task!.taskData!.voting && !task!.taskData!.complete){
+            <po-button class="po-md-12" [p-label]="resultSize ? 'Nova votação' : 'Refinar'" (p-click)="plan()"> </po-button>
+            @if(resultSize){
+              <po-button class="po-md-12 po-mt-1" p-kind="primary" [p-label]="'Concluir'" (p-click)="complete()"> </po-button>
+            }
+
+          }
+          @if(task!.taskData!.voting){
+            <po-button class="po-md-12" p-kind="primary" [p-label]="'Finalizar votação'" (p-click)="complete()"> </po-button>
+          }
+        } @else if(task!.taskData!.voting){
+          <po-button class="po-md-12" p-label="Votar" (p-click)="vote()"> </po-button>
+        }
+
       </div>
       <div class="po-md-12 po-row po-m-2">
         <div class="po-md-4">
           <po-tag [p-type]="taskTag.type" [p-value]="taskTag.value"></po-tag>
-          <po-info [p-orientation]="orientation" *ngIf="resultSize && !task?.taskData?.voting" p-label="Resultado" [p-value]="resultSize"></po-info>
+          @if(task && task.taskData && resultSize && !task.taskData.voting){
+            <po-info [p-orientation]="orientation" p-label="Resultado" [p-value]="resultSize"></po-info>
+          }
         </div>
         <div class="po-md-4"></div>
         <div class="po-md-4">
-          <po-button *ngIf="isCreator && resultSize && !task!.taskData!.voting && !task!.taskData!.complete" p-label="Ajustar resultado" (p-click)="openModal()"></po-button>
+          @if(task && task.taskData && isCreator && resultSize && !task.taskData.voting && !task.taskData.complete){
+            <po-button p-label="Ajustar resultado" (p-click)="openModal()"></po-button>
+          }
         </div>
       </div>
     </div>

@@ -90,7 +90,7 @@ export class VotingRoomComponent implements OnInit {
   finalizarAcao() {
     let questions = this.steps.length;
     let points = 0;
-    let result = 0
+    let result = 0;
 
     if(this.task?.taskData?.voting){
 

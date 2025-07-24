@@ -4,7 +4,7 @@ import { BrowserModule } from '@angular/platform-browser';
 
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
-import { PoModule, PoStepperModule } from '@po-ui/ng-components';
+import { PoModule } from '@po-ui/ng-components';
 import { RouterModule } from '@angular/router';
 import { CreateSessionComponent } from './pages/create-session/create-session.component';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
@@ -16,7 +16,7 @@ import { VotingRoomComponent } from './pages/voting-room/voting-room.component';
 import { SessionTasksComponent } from './pages/session-tasks/session-tasks.component';
 import { TaskComponent } from './pages/task/task.component';
 import { VotingResultComponent } from './pages/voting-result/voting-result.component';
-import { HttpClient, HttpClientModule, provideHttpClient } from '@angular/common/http';
+import { provideHttpClient } from '@angular/common/http';
 import { CommonModule } from '@angular/common';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 
@@ -25,7 +25,6 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
     AppComponent,
     CreateSessionComponent,
     VotingRoomComponent,
-    VotingResultComponent,
   ],
   imports: [
     BrowserModule,
@@ -38,7 +37,8 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
     CommonModule,
     TaskComponent,
     SessionTasksComponent,
-    BrowserAnimationsModule
+    BrowserAnimationsModule,
+    VotingResultComponent,
   ],
   providers: [
     provideZoneChangeDetection({eventCoalescing: true}),

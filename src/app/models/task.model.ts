@@ -18,8 +18,8 @@ export class TaskModel {
     this.updatedAt = updatedAt;
     this.result = result;
     this.voters = voters;
-    this.voting = false;
-    this.complete = false;
+    this.voting = voting;
+    this.complete = complete;
 
   }
 }

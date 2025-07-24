@@ -3,9 +3,9 @@
   <po-divider class="po-m-2"></po-divider>
 
   <div class="row po-m-2">
-
-      <app-task *ngFor="let task of tasks" [task]="task" [isCreator]="isCreator" ></app-task>
-
+    @for(task of tasks; track task.id){
+      <app-task [task]="task" [isCreator]="isCreator" ></app-task>
+    }
   </div>
 
   <po-modal p-title="Options" [p-primary-action]="confirm" [p-secondary-action]="close">

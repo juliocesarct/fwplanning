@@ -1,7 +1,14 @@
 <po-page-default p-title="Resultado" p-subtitle="Sessão de refinamento: {{sessionName}}. | {{userName}}" [p-actions]="actions">
 
-  <po-loading-overlay *ngIf="(task?.taskData?.voting ?? true) && !task?.taskData?.result" [p-screen-lock]="true" p-text="Aguarde o fim da votação" ></po-loading-overlay>
-  <app-task *ngIf="task" [isCreator]="false" [task]="task!"></app-task>
-  <po-table *ngIf="!(task?.taskData?.voting ?? true)" [p-items]="task?.taskData?.voters ?? []" [p-columns]="[{ property: 'name', label: 'Nome'},{ property: 'size', label: 'Tamanho'}]"> </po-table>
+  @if((task?.taskData?.voting ?? true) && !task?.taskData?.result){
+    <po-loading-overlay [p-screen-lock]="true" p-text="Aguarde o fim da votação" ></po-loading-overlay>
+  }
 
+  @if(task){
+    <app-task [isCreator]="false" [task]="task!"></app-task>
+  }
+
+  @if(!(task?.taskData?.voting ?? true)){
+    <po-table [p-items]="task?.taskData?.voters ?? []" [p-columns]="[{ property: 'name', label: 'Nome'},{ property: 'size', label: 'Tamanho'}]"> </po-table>
+  }
 </po-page-default>

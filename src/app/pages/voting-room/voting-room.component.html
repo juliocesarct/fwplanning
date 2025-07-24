@@ -3,14 +3,18 @@
   <div class="po-md-12">
     <h1 class="po-font-title">Votação: {{task?.taskData?.taskId}}</h1>
       <div class="container-usuarios">
-        <div *ngFor="let user of task?.taskData?.voters || []">
-          <po-avatar
-            class="usuarios"
-            [p-tooltip]="user.name"
-            p-src="https://po-ui.io/assets/graphics/logo-po.png"
-          >
-          </po-avatar>
-        </div>
+        @if(task && task.taskData){
+          @for(voter of task.taskData.voters; track task.id){
+            <div>
+              <po-avatar
+                class="usuarios"
+                [p-tooltip]="voter.name"
+                p-src="https://po-ui.io/assets/graphics/logo-po.png"
+              >
+              </po-avatar>
+            </div>
+          }
+        }
       </div>
 
         <div class="po-row">
@@ -22,36 +26,39 @@
         [p-disable-click]="true"
         (p-change-step)="atualizarPassoAtual( $event )"
       >
-        <po-step *ngFor="let step of steps" [p-label]="step.label!" [p-icon-default]="step.iconDefault">
-          <h2>{{ step.label }}</h2>
-          <p class="po-m-2" *ngFor="let question of step.values">* {{question}}</p>
-          <po-radio-group
-            name="tests"
-            p-label="Selecione o valor mais adequado de acordo com a perguntas acima:"
-            [p-options]="step.options"
-            [(ngModel)]="step.answer">
-          </po-radio-group>
-        </po-step>
+        @for (step of steps; track step.id) {
+          <po-step [p-label]="step.label!" [p-icon-default]="step.iconDefault">
+            <h2>{{ step.label }}</h2>
+            @for(question of step.values; track question.id){
+              <p class="po-m-2"> * {{question}}</p>
+            }
+            <po-radio-group
+              name="tests"
+              p-label="Selecione o valor mais adequado de acordo com a perguntas acima:"
+              [p-options]="step.options"
+              [(ngModel)]="step.answer">
+            </po-radio-group>
+          </po-step>
+        }
       </po-stepper>
 
       <div class="po-row po-mt-2">
         <div class="po-md-12 po-text-right">
 
-          <po-button class="po-md-12"
-            *ngIf="passoAtual !== 'Testes'"
-            p-label="Avançar"
-            (p-click)="next()"
-            [p-disabled]="(passoAtual === 'Escopo' && !steps[0].answer ) || (passoAtual === 'Desenvolvimento' && !steps[1].answer)">
-          </po-button>
-
-          <po-button class="po-md-12"
-            *ngIf="passoAtual === 'Testes'"
-            p-label="Finalizar"
-            p-kind="primary"
-            (p-click)="finalizarAcao()"
-            [p-disabled]="!steps[2].answer">
-          </po-button>
-
+          @if(passoAtual === 'Testes'){
+            <po-button class="po-md-12"
+              p-label="Finalizar"
+              p-kind="primary"
+              (p-click)="finalizarAcao()"
+              [p-disabled]="!steps[2].answer">
+            </po-button>
+          } @else {
+            <po-button class="po-md-12"
+              p-label="Avançar"
+              (p-click)="next()"
+              [p-disabled]="(passoAtual === 'Escopo' && !steps[0].answer ) || (passoAtual === 'Desenvolvimento' && !steps[1].answer)">
+            </po-button>
+          }
         </div>
       </div>
 

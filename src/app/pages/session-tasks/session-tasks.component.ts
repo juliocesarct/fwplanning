@@ -1,7 +1,7 @@
 import { Component, ViewChild, OnInit, inject } from '@angular/core';
 import { FirebaseService } from '../../services/firebase.service';
 import { ActivatedRoute, Router } from '@angular/router';
-import { TaskModel, Task } from '../../models/task.model';
+import { TaskModel } from '../../models/task.model';
 import { PoModalAction, PoModalComponent, PoModule, PoNotificationService, PoPageAction } from '@po-ui/ng-components';
 import { FormsModule, NgForm, ReactiveFormsModule } from '@angular/forms';
 import { TaskComponent } from '../task/task.component';

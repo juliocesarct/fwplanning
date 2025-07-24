@@ -2,12 +2,14 @@ import { Component, inject, OnInit } from '@angular/core';
 import { Task } from '../../models/task.model';
 import { FirebaseService } from '../../services/firebase.service';
 import { ActivatedRoute, Router } from '@angular/router';
-import { PoNotificationService, PoPageAction } from '@po-ui/ng-components';
+import { PoModule, PoNotificationService, PoPageAction } from '@po-ui/ng-components';
+import { CommonModule } from '@angular/common';
+import { TaskComponent } from '../task/task.component';
 
 @Component({
   selector: 'app-voting-result',
-  standalone: false,
-
+  standalone: true,
+  imports: [PoModule, CommonModule, TaskComponent],
   templateUrl: './voting-result.component.html',
   styleUrl: './voting-result.component.css'
 })
