@@ -1,13 +1,15 @@
 import { Component, inject, OnInit, ViewChild } from '@angular/core';
-import { PoRadioGroupOption, PoStepperComponent, PoStepComponent, PoNotificationService } from '@po-ui/ng-components';
+import { PoRadioGroupOption, PoStepperComponent, PoStepComponent, PoNotificationService, PoModule } from '@po-ui/ng-components';
 import { FirebaseService } from '../../services/firebase.service';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Task } from '../../models/task.model';
+import { FormsModule } from '@angular/forms';
+import { Step } from '../../interface/step';
 
 @Component({
   selector: 'app-voting-room',
-  standalone: false,
-
+  standalone: true,
+  imports: [PoModule, FormsModule],
   templateUrl: './voting-room.component.html',
   styleUrl: './voting-room.component.css'
 })
@@ -23,14 +25,7 @@ export class VotingRoomComponent implements OnInit {
   private poNotification = inject(PoNotificationService);
 
   ngOnInit(): void {
-    if(this.route.snapshot.paramMap.get('taskId')){
-      this.firebase.getTask(this.route.snapshot.paramMap.get('taskId')!).subscribe(
-        data => {
-          this.task = data
-        },
-        error => this.poNotification.error(error)
-      )
-    }
+    this.getTaskData()
   }
 
   // Opções para o radio group do Passo 1
@@ -57,29 +52,40 @@ export class VotingRoomComponent implements OnInit {
     { label: '? - Não consigo opinar', value: -1 }
   ];
 
-  steps: any[] = [
+  public readonly steps: Step[] = [
     { label: 'Escopo',
       id: '1',
       values: ['Houve um completo entendimento de todo escopo dessa história?', 'Enxerga a possibilidade de precisar refinar melhor o como a tarefa será realizada?', 'Acredita que a história em questão possa trazer novas demandas como o adaptação de funcionalidades pré-existentes?'],
       options: this.objectiveOptions,
-      answer: ''
+      answer: 0
     },
     { label: 'Desenvolvimento',
       id: '2',
       values: ['Desenvolvimento - Deve integrar com outro sistema?', 'A validação exige contato com times externos?', 'Desenvolvimento do teste unitário é complexo?'],
       options: this.developmentOptions,
-      answer: ''
+      answer: 0
     },
     { label: 'Testes',
       id: '3',
       values: ['O teste manual é necessário? Domina a configuração necessária e tem os pré-requisitos para o teste?', 'O teste exige interação com times externos?'],
       options: this.testsOptions,
-      answer: ''
+      answer: 0
     },
   ];
 
+  getTaskData(){
+    if(this.route.snapshot.paramMap.get('taskId')){
+      this.firebase.getTask(this.route.snapshot.paramMap.get('taskId')!).subscribe(
+        data => {
+          this.task = data
+        },
+        error => this.poNotification.error(error)
+      )
+    }
+  }
+
   atualizarPassoAtual(step: string | PoStepComponent | number) {
-     typeof step === 'object' ? this.passoAtual = step.label : this.passoAtual = step;
+    this.passoAtual = typeof step === 'object' ? step.label : step;
   }
 
   next(){
@@ -94,8 +100,12 @@ export class VotingRoomComponent implements OnInit {
 
     if(this.task?.taskData?.voting){
 
-      this.steps.forEach((step: any) => {
-        step.answer > 0 ? points += step.answer : questions-- ;
+      this.steps.forEach((step: Step) => {
+        if(step.answer > 0 ){
+          points += step.answer
+        }else{
+          questions--
+        }
       })
 
       result = questions >= 1 ? Math.round(points/questions): points;

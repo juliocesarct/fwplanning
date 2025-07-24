@@ -1,7 +1,7 @@
 import { Component, inject, OnInit } from '@angular/core';
 import { Task } from '../../models/task.model';
 import { FirebaseService } from '../../services/firebase.service';
-import { ActivatedRoute, Router } from '@angular/router';
+import { ActivatedRoute, Router, RouterOutlet } from '@angular/router';
 import { PoModule, PoNotificationService, PoPageAction } from '@po-ui/ng-components';
 import { CommonModule } from '@angular/common';
 import { TaskComponent } from '../task/task.component';

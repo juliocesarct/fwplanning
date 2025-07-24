@@ -1,13 +1,16 @@
+import { CommonModule } from '@angular/common';
 import { Component, inject } from '@angular/core';
+import { RouterLink, RouterLinkActive, RouterOutlet } from '@angular/router';
 
-import { PoThemeA11yEnum } from '@po-ui/ng-components';
+import { PoModule, PoThemeA11yEnum } from '@po-ui/ng-components';
 import { ThfThemeService, poThemeTotvs } from '@totvs/themes';
 
 @Component({
   selector: 'app-root',
   templateUrl: './app.component.html',
+  imports: [PoModule, CommonModule, RouterOutlet, RouterOutlet],
   styleUrls: ['./app.component.css'],
-  standalone: false
+  standalone: true
 })
 export class AppComponent {
 

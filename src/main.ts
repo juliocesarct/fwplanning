@@ -1,7 +1,16 @@
-import { platformBrowser } from '@angular/platform-browser';
-import { AppModule } from './app/app.module';
+import { environment } from './environments/environment';
+import { bootstrapApplication } from '@angular/platform-browser';
+import { AppComponent } from './app/app.component';
+import { provideRouter } from '@angular/router';
+import { appRoutes } from './app/app-routes';
+import { initializeApp, provideFirebaseApp } from '@angular/fire/app';
+import { getFirestore, provideFirestore } from '@angular/fire/firestore';
 
-platformBrowser().bootstrapModule(AppModule, {
-  ngZoneEventCoalescing: true,
-})
-  .catch(err => console.error(err));
+bootstrapApplication(AppComponent, {
+  providers: [
+    provideRouter(appRoutes), // <-- Configure o roteador com suas rotas
+    provideFirebaseApp(() => initializeApp( environment.firebaseConfig)),
+    // 2. Fornece o Firestore, usando a instância do aplicativo Firebase
+    provideFirestore(() => getFirestore()),
+  ]
+}).catch(err => console.error(err));

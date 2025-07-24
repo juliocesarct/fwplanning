@@ -1,12 +1,11 @@
-import { NgModule } from '@angular/core';
-import { RouterModule, Routes } from '@angular/router';
+import { Routes } from '@angular/router';
 import { CreateSessionComponent } from './pages/create-session/create-session.component';
 import { SessionTasksComponent } from './pages/session-tasks/session-tasks.component';
 import { AuthGuard } from './auth.guard';
 import { VotingRoomComponent } from './pages/voting-room/voting-room.component';
 import { VotingResultComponent } from './pages/voting-result/voting-result.component';
 
-const routes: Routes = [
+export const appRoutes: Routes = [
   { path: '', component: CreateSessionComponent }, // Rota padrão
   { path: 'createsession', component: CreateSessionComponent },
   { path: 'joinsession/:sessionId', component: CreateSessionComponent },
@@ -14,9 +13,3 @@ const routes: Routes = [
   { path: 'voting-room/:sessionId/:taskId', component: VotingRoomComponent, canActivate: [ AuthGuard ] },
   { path: 'voting-result/:sessionId/:taskId', component: VotingResultComponent, canActivate: [ AuthGuard ] }
 ];
-
-@NgModule({
-  imports: [RouterModule.forRoot(routes)],
-  exports: [RouterModule]
-})
-export class AppRoutingModule { }

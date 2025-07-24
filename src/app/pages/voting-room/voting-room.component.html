@@ -29,7 +29,7 @@
         @for (step of steps; track step.id) {
           <po-step [p-label]="step.label!" [p-icon-default]="step.iconDefault">
             <h2>{{ step.label }}</h2>
-            @for(question of step.values; track question.id){
+            @for(question of step.values; track question){
               <p class="po-m-2"> * {{question}}</p>
             }
             <po-radio-group

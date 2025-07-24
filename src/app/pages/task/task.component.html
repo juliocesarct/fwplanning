@@ -37,7 +37,10 @@
       </div>
       <div class="po-md-12 po-row po-m-2">
         <div class="po-md-4">
-          <po-tag [p-type]="taskTag.type" [p-value]="taskTag.value"></po-tag>
+          @if(taskTag){
+            <po-tag [p-type]="taskTag.type" [p-value]="taskTag.value"></po-tag>
+          }
+
           @if(task && task.taskData && resultSize && !task.taskData.voting){
             <po-info [p-orientation]="orientation" p-label="Resultado" [p-value]="resultSize"></po-info>
           }

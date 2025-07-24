@@ -1,7 +1,7 @@
 import { Component, ViewChild, OnInit, inject } from '@angular/core';
 import { FirebaseService } from '../../services/firebase.service';
 import { ActivatedRoute, Router } from '@angular/router';
-import { TaskModel } from '../../models/task.model';
+import { Task, TaskModel } from '../../models/task.model';
 import { PoModalAction, PoModalComponent, PoModule, PoNotificationService, PoPageAction } from '@po-ui/ng-components';
 import { FormsModule, NgForm, ReactiveFormsModule } from '@angular/forms';
 import { TaskComponent } from '../task/task.component';
@@ -21,7 +21,7 @@ export class SessionTasksComponent implements OnInit {
   userName = localStorage.getItem("user")
   sessionName = localStorage.getItem("sessionName")
   sessionId: string | null = "";
-  tasks: any;
+  tasks: Task[] | undefined;
   newTask: TaskModel = new TaskModel("","","",new Date(), new Date(),0,[],false,false);
   isCreator = false;
   public readonly actions: PoPageAction[] = [{label: 'Adicionar nova tarefa', action: () => this.addTask()}, {label:'Sair da sessão', action: () => this.logout()}];

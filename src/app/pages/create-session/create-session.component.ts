@@ -1,14 +1,14 @@
 import { Component, inject, OnInit, ViewChild } from '@angular/core';
-import { UntypedFormBuilder, UntypedFormGroup, Validators } from '@angular/forms';
+import { ReactiveFormsModule, UntypedFormBuilder, UntypedFormGroup, Validators } from '@angular/forms';
 
-import { PoModalAction, PoModalComponent } from '@po-ui/ng-components';
+import { PoModalAction, PoModalComponent, PoModule } from '@po-ui/ng-components';
 import { FirebaseService } from '../../services/firebase.service';
 import { ActivatedRoute, Router } from '@angular/router';
 
 @Component({
   selector: 'app-create-session',
-  standalone: false,
-
+  standalone: true,
+  imports: [PoModule, ReactiveFormsModule],
   templateUrl: './create-session.component.html',
   styleUrl: './create-session.component.css'
 })

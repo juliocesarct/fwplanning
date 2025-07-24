@@ -2,9 +2,14 @@ import { Component, inject, Input, OnInit, ViewChild } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Task, Voter } from '../../models/task.model';
 import { FirebaseService } from '../../services/firebase.service';
-import { PoInfoOrientation, PoModalAction, PoModalComponent, PoModule, PoNotificationService } from '@po-ui/ng-components';
+import { PoInfoOrientation, PoModalAction, PoModalComponent, PoModule, PoNotificationService, PoTagType } from '@po-ui/ng-components';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
+
+export interface TagType{
+  value: string,
+  type: PoTagType
+}
 
 @Component({
   selector: 'app-task',
@@ -21,7 +26,7 @@ export class TaskComponent implements OnInit {
   private sessionId: string | null = null;
   public isInVotingRoom = false;
   public resultSize: string | undefined;
-  public taskTag: any;
+  public taskTag: TagType | undefined;
   public readonly orientation: PoInfoOrientation = PoInfoOrientation.Horizontal;
   public votesBySize = [{label: 'P', data: 0},{label: 'M', data: 0},{label: 'G', data: 0}];
   public newResult: number | undefined;
@@ -42,9 +47,9 @@ export class TaskComponent implements OnInit {
   ngOnInit(): void {
 
     if( (this.task?.taskData?.voting ?? false) || (this.task?.taskData?.result && !this.task?.taskData?.complete) ) {
-      this.taskTag = {value: 'Em andamento', type: 'warning'}
+      this.taskTag = {value: 'Em andamento', type: PoTagType.Warning}
     } else {
-      this.taskTag = this.task?.taskData?.complete ?? false ? {value: 'Finalizado', type: 'success'} : {value: 'Pendente', type: 'danger'}
+      this.taskTag = this.task?.taskData?.complete ?? false ? {value: 'Finalizado', type: PoTagType.Success} : {value: 'Pendente', type: PoTagType.Danger}
     }
     this.sessionId = this.route.snapshot.paramMap.get('sessionId');
 
