@@ -1,4 +1,4 @@
-import { Component, inject, Input, OnInit, ViewChild } from '@angular/core';
+import { Component, computed, inject, Input, OnInit, ViewChild } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Task, Voter } from '../../models/task.model';
 import { FirebaseService } from '../../services/firebase.service';
@@ -25,7 +25,6 @@ export class TaskComponent implements OnInit {
 
   private sessionId: string | null = null;
   public isInVotingRoom = false;
-  public resultSize: string | undefined;
   public taskTag: TagType | undefined;
   public readonly orientation: PoInfoOrientation = PoInfoOrientation.Horizontal;
   public votesBySize = [{label: 'P', data: 0},{label: 'M', data: 0},{label: 'G', data: 0}];
@@ -35,6 +34,19 @@ export class TaskComponent implements OnInit {
   private route = inject(ActivatedRoute);
   private firebase = inject(FirebaseService);
   private poNotification = inject(PoNotificationService);
+
+  readonly resultSize = computed(() => {
+    let result: undefined | string;
+
+    if(this.task?.taskData?.result == 1){
+      result = "P";
+    }else if(this.task?.taskData?.result == 2){
+      result = "M";
+    }else if(this.task?.taskData?.result ?? 0 >= 3){
+      result = "G";
+    }
+    return result;
+  })
 
   get totalParticipantes(): string {
     const voters = this.task?.taskData?.voters;
@@ -53,14 +65,6 @@ export class TaskComponent implements OnInit {
     }
     this.sessionId = this.route.snapshot.paramMap.get('sessionId');
 
-    if((this.task?.taskData?.result) == 1){
-      this.resultSize = "P"
-    }else if((this.task?.taskData?.result ) == 2){
-      this.resultSize = "M"
-    }else if((this.task?.taskData?.result ?? 0) >= 3){
-      this.resultSize = "G"
-    }
-
     this.task?.taskData?.voters .forEach(voter => {
       if(voter.hasVoted && voter.vote > 0){
         this.votesBySize[voter.vote-1].data += 1;
@@ -78,9 +82,9 @@ export class TaskComponent implements OnInit {
 
     this.firebase.updateTask(this.task!).then(
       () => {
-        console.log('Task atualizada com sucesso!');
+        this.poNotification.success('Item atualizado com sucesso!')
       }).catch(error => {
-        console.error('Erro ao atualizar task: ', error);
+        this.poNotification.error(`Erro ao atualizar task: `+error)
       });
 
   }
@@ -100,7 +104,7 @@ export class TaskComponent implements OnInit {
         (data) => {
           console.log('Task atualizada com sucesso!'+data);
         }).catch(error => {
-          console.error('Erro ao atualizar task: ', error);
+          this.poNotification.error(`Erro ao atualizar task: `+error)
         });
     }
 
@@ -109,8 +113,8 @@ export class TaskComponent implements OnInit {
 
   complete(){
 
-    const numberOfVotes = 0;
-    const voteSum = 0;
+    let numberOfVotes = 0;
+    let voteSum = 0;
 
     if(!this.task!.taskData!.voting && !this.task!.taskData!.complete){
       this.task!.taskData!.complete = true;
@@ -121,21 +125,17 @@ export class TaskComponent implements OnInit {
 
     this.task!.taskData!.voting = false;
 
-    const result = Math.round(voteSum / numberOfVotes);
+    this.task?.taskData?.voters .forEach(voter => {
+      if(voter.hasVoted && voter.vote > 0){
+        numberOfVotes++;
+        voteSum += voter.vote;
+      }
+    });
 
-    if(result <= 1){
-      this.resultSize = "P"
-    }else if(result == 2){
-      this.resultSize = "M"
-    }else if(result >= 3){
-      this.resultSize = "G"
-    }
-
-    this.task!.taskData!.result = result;
+    this.task!.taskData!.result =  Math.round(voteSum / numberOfVotes);
 
     this.updateTask(this.task!)
 
-    this.router.navigate(['session/',this.sessionId])
   }
 
   closeModal(){
@@ -148,25 +148,14 @@ export class TaskComponent implements OnInit {
 
   setNewResult(){
     this.task!.taskData!.result = this.newResult ?? 0;
-
-    if(this.task!.taskData!.result <= 1){
-      this.resultSize = "P"
-    }else if(this.task!.taskData!.result == 2){
-      this.resultSize = "M"
-    }else if(this.task!.taskData!.result >= 3){
-      this.resultSize = "G"
-    }
-
-    this.updateTask(this.task!)
-
-    console.log(this.task?.taskData?.result)
+    this.updateTask(this.task!);
   }
 
   close: PoModalAction = {
     action: () => {
       this.closeModal();
     },
-    label: 'Close',
+    label: 'Fechar',
     danger: true
   };
 
@@ -174,13 +163,13 @@ export class TaskComponent implements OnInit {
     action: () => {
       this.setNewResult();
     },
-    label: 'Confirm'
+    label: 'Confirmar'
   };
 
   updateTask(task: Task){
     this.firebase.updateTask(task!).then(
       () => {
-        this.poNotification.success('Task atualizada com sucesso!');
+        this.poNotification.success('Item atualizado com sucesso!');
       }).catch(error => {
         this.poNotification.error(error);
       });

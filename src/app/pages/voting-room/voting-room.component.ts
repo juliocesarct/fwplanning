@@ -1,4 +1,4 @@
-import { Component, inject, OnInit, ViewChild } from '@angular/core';
+import { Component, inject, OnInit, signal, ViewChild } from '@angular/core';
 import { PoRadioGroupOption, PoStepperComponent, PoStepComponent, PoNotificationService, PoModule } from '@po-ui/ng-components';
 import { FirebaseService } from '../../services/firebase.service';
 import { ActivatedRoute, Router } from '@angular/router';
@@ -17,7 +17,7 @@ export class VotingRoomComponent implements OnInit {
 
   @ViewChild('meuStepper') meuStepper: PoStepperComponent | undefined;
 
-  public passoAtual: string | number | PoStepComponent | undefined;
+  public passoAtual = signal("");
   public task: Task | undefined;
   private firebase = inject(FirebaseService);
   private route = inject(ActivatedRoute);
@@ -84,8 +84,10 @@ export class VotingRoomComponent implements OnInit {
     }
   }
 
-  atualizarPassoAtual(step: string | PoStepComponent | number) {
-    this.passoAtual = typeof step === 'object' ? step.label : step;
+  atualizarPassoAtual(step: PoStepComponent | number) {
+    if(typeof step === 'object'){
+      this.passoAtual.set( step.label );
+    }
   }
 
   next(){
@@ -128,10 +130,8 @@ export class VotingRoomComponent implements OnInit {
         }
       }
 
-      this.firebase.updateTask(this.task!).then(
-      () => {
-        //this.poNotification.success('Task atualizada com sucesso!');
-      }).catch(error => {
+      this.firebase.updateTask(this.task!).then().catch(
+        error => {
         this.poNotification.error(error);
       });
 

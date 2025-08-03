@@ -67,7 +67,7 @@ export class SessionTasksComponent implements OnInit {
       this.newTask.sessionId = this.sessionId!
       this.firebaseService.addTask(this.newTask).then(
       () => {
-        this.poNotification.success(`Task adicionada com sucesso!`);
+        this.poNotification.success(`Item adicionado com sucesso!`);
         this.confirm.loading = false;
         this.form.reset();
         this.closeModal();

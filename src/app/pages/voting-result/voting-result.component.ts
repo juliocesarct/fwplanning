@@ -15,7 +15,7 @@ import { TaskComponent } from '../task/task.component';
 })
 export class VotingResultComponent implements OnInit {
 
-  public _task: Task | undefined;
+  public task: Task | undefined;
   public readonly actions: PoPageAction[] = [{label: 'Sair', action: () => this.goToSession()}];
   public readonly userName: string = localStorage.getItem("user") ?? "";
   public readonly sessionName: string = localStorage.getItem("session") ?? "";
@@ -27,21 +27,11 @@ export class VotingResultComponent implements OnInit {
 
   ngOnInit(){
     if(this.route.snapshot.paramMap.get('taskId')){
-      this.firebase.getTask(this.route.snapshot.paramMap.get('taskId')!).subscribe(
-        data => {
-          this.task = data
-        },
-        error => console.log(error)
-      )
+      this.firebase.getTask(this.route.snapshot.paramMap.get('taskId')!).subscribe({
+        next: data => this.task = data,
+        error: error => console.log(error)
+      })
     }
-  }
-
-  set task(value: Task | undefined){
-    this._task = value;
-  }
-
-  get task(): Task | undefined{
-    return this._task
   }
 
   voteAgain(){
@@ -49,7 +39,7 @@ export class VotingResultComponent implements OnInit {
   }
 
   goToSession(){
-    if(this._task?.taskData?.complete){
+    if(this.task?.taskData?.complete){
       this.router.navigate(['/session', this.route.snapshot.paramMap.get('sessionId') ]);
     }else{
       this.poNotification.warning('Aguarde a conclusão')
