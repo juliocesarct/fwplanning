@@ -21,8 +21,8 @@
       <div class="po-md-12">
         @if(isCreator){
           @if(!task!.taskData!.voting && !task!.taskData!.complete){
-            <po-button class="po-md-12" [p-label]="resultSize() ? 'Nova votação' : 'Refinar'" (p-click)="plan()"> </po-button>
-            @if(resultSize()){
+            <po-button class="po-md-12" [p-label]="result() > 0 ? 'Nova votação' : 'Refinar'" (p-click)="plan()"> </po-button>
+            @if(task?.taskData?.result){
               <po-button class="po-md-12 po-mt-1" p-kind="primary" [p-label]="'Concluir'" (p-click)="complete()"> </po-button>
             }
 
@@ -41,13 +41,13 @@
             <po-tag [p-type]="taskTag.type" [p-value]="taskTag.value"></po-tag>
           }
 
-          @if(task && task.taskData && task.taskData.result > 0 && !task.taskData.voting){
+          @if(task && task.taskData && result() > 0 && !task.taskData.voting){
             <po-info [p-orientation]="orientation" p-label="Resultado" [p-value]="resultSize()"></po-info>
           }
         </div>
         <div class="po-md-4"></div>
         <div class="po-md-4">
-          @if(task && task.taskData && isCreator && resultSize() && !task.taskData.voting && !task.taskData.complete){
+          @if(task && task.taskData && isCreator && task.taskData.result && !task.taskData.voting && !task.taskData.complete){
             <po-button p-label="Ajustar resultado" (p-click)="openModal()"></po-button>
           }
         </div>

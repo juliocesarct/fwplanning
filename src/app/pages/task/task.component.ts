@@ -1,4 +1,4 @@
-import { Component, computed, inject, Input, OnInit, ViewChild } from '@angular/core';
+import { Component, computed, inject, Input, OnInit, signal, ViewChild } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Task, Voter } from '../../models/task.model';
 import { FirebaseService } from '../../services/firebase.service';
@@ -29,21 +29,29 @@ export class TaskComponent implements OnInit {
   public readonly orientation: PoInfoOrientation = PoInfoOrientation.Horizontal;
   public votesBySize = [{label: 'P', data: 0},{label: 'M', data: 0},{label: 'G', data: 0}];
   public newResult: number | undefined;
+  public result = signal(0);
 
   private router = inject(Router);
   private route = inject(ActivatedRoute);
   private firebase = inject(FirebaseService);
   private poNotification = inject(PoNotificationService);
-
   readonly resultSize = computed(() => {
     let result: undefined | string;
 
-    if(this.task?.taskData?.result == 1){
-      result = "P";
-    }else if(this.task?.taskData?.result == 2){
-      result = "M";
-    }else if(this.task?.taskData?.result ?? 0 >= 3){
-      result = "G";
+    if(this.result() > 0){
+      if(this.result() == 1){
+        result = "P";
+      }else if(this.result() == 2){
+        result = "M";
+      }else if(this.result() ?? 0 >= 3){
+        result = "G";
+      }
+
+      if( (this.task?.taskData?.voting ?? false) || (this.result() && !this.task?.taskData?.complete) ) {
+        this.taskTag = {value: 'Em andamento', type: PoTagType.Warning}
+      } else {
+        this.taskTag = this.task?.taskData?.complete ?? false ? {value: 'Finalizado', type: PoTagType.Success} : {value: 'Pendente', type: PoTagType.Danger}
+      }
     }
     return result;
   })
@@ -58,12 +66,9 @@ export class TaskComponent implements OnInit {
 
   ngOnInit(): void {
 
-    if( (this.task?.taskData?.voting ?? false) || (this.task?.taskData?.result && !this.task?.taskData?.complete) ) {
-      this.taskTag = {value: 'Em andamento', type: PoTagType.Warning}
-    } else {
-      this.taskTag = this.task?.taskData?.complete ?? false ? {value: 'Finalizado', type: PoTagType.Success} : {value: 'Pendente', type: PoTagType.Danger}
-    }
     this.sessionId = this.route.snapshot.paramMap.get('sessionId');
+
+    this.result.update(()=> this.task?.taskData?.result ?? 0 )
 
     this.task?.taskData?.voters .forEach(voter => {
       if(voter.hasVoted && voter.vote > 0){
@@ -139,6 +144,7 @@ export class TaskComponent implements OnInit {
   }
 
   closeModal(){
+    this.newResult = undefined;
     this.poModal.close()
   }
 
@@ -149,6 +155,7 @@ export class TaskComponent implements OnInit {
   setNewResult(){
     this.task!.taskData!.result = this.newResult ?? 0;
     this.updateTask(this.task!);
+    this.poModal.close();
   }
 
   close: PoModalAction = {
@@ -168,10 +175,10 @@ export class TaskComponent implements OnInit {
 
   updateTask(task: Task){
     this.firebase.updateTask(task!).then(
-      () => {
-        this.poNotification.success('Item atualizado com sucesso!');
-      }).catch(error => {
-        this.poNotification.error(error);
-      });
+      () => this.poNotification.success('Item atualizado com sucesso!')
+    ).catch(error => {
+      this.poNotification.error(error);
+    });
+    this.result.update(() => task.taskData?.result ?? 0 );
   }
 }
