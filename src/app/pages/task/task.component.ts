@@ -52,6 +52,9 @@ export class TaskComponent implements OnInit {
       } else {
         this.taskTag = this.task?.taskData?.complete ?? false ? {value: 'Finalizado', type: PoTagType.Success} : {value: 'Pendente', type: PoTagType.Danger}
       }
+
+      this.calculateVotes();
+
     }
     return result;
   })
@@ -68,28 +71,33 @@ export class TaskComponent implements OnInit {
 
     this.sessionId = this.route.snapshot.paramMap.get('sessionId');
 
-    this.result.update(()=> this.task?.taskData?.result ?? 0 )
+    this.result.update(()=> this.task?.taskData?.result ?? 0 );
 
+    this.calculateVotes();
+
+  }
+
+  calculateVotes(){
+    this.votesBySize = [{label: 'P', data: 0},{label: 'M', data: 0},{label: 'G', data: 0}];
     this.task?.taskData?.voters .forEach(voter => {
       if(voter.hasVoted && voter.vote > 0){
         this.votesBySize[voter.vote-1].data += 1;
       }
     });
-
   }
 
   plan(){
 
-    localStorage.setItem('voting','true')
+    localStorage.setItem('voting','true');
     this.task!.taskData!.voting = true;
     this.task!.taskData!.updatedAt = new Date();
     this.task!.taskData!.voters = [];
 
     this.firebase.updateTask(this.task!).then(
       () => {
-        this.poNotification.success('Item atualizado com sucesso!')
+        this.poNotification.success('Item atualizado com sucesso!');
       }).catch(error => {
-        this.poNotification.error(`Erro ao atualizar task: `+error)
+        this.poNotification.error(`Erro ao atualizar task: `+error);
       });
 
   }
@@ -123,6 +131,8 @@ export class TaskComponent implements OnInit {
 
     if(!this.task!.taskData!.voting && !this.task!.taskData!.complete){
       this.task!.taskData!.complete = true;
+      this.router.navigate(['/session', this.sessionId]);
+      this.taskTag = {value: 'Finalizado', type: PoTagType.Success};
     }
 
     localStorage.setItem('voting','false');
@@ -130,14 +140,17 @@ export class TaskComponent implements OnInit {
 
     this.task!.taskData!.voting = false;
 
-    this.task?.taskData?.voters .forEach(voter => {
-      if(voter.hasVoted && voter.vote > 0){
-        numberOfVotes++;
-        voteSum += voter.vote;
-      }
-    });
+    if(!this.newResult){
 
-    this.task!.taskData!.result =  Math.round(voteSum / numberOfVotes);
+      this.task?.taskData?.voters .forEach(voter => {
+        if(voter.hasVoted && voter.vote > 0){
+          numberOfVotes++;
+          voteSum += voter.vote;
+        }
+      });
+
+      this.task!.taskData!.result = Math.round(voteSum / numberOfVotes);
+    }
 
     this.updateTask(this.task!)
 
@@ -175,7 +188,7 @@ export class TaskComponent implements OnInit {
 
   updateTask(task: Task){
     this.firebase.updateTask(task!).then(
-      () => this.poNotification.success('Item atualizado com sucesso!')
+      //() => this.poNotification.success('Item atualizado com sucesso!')
     ).catch(error => {
       this.poNotification.error(error);
     });

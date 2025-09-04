@@ -1,6 +1,4 @@
-import { HttpClientTestingModule } from '@angular/common/http/testing';
 import { TestBed, waitForAsync } from '@angular/core/testing';
-import { RouterTestingModule } from '@angular/router/testing';
 
 import {
   PoMenuModule,
@@ -17,10 +15,9 @@ describe('AppComponent', () => {
         PoMenuModule,
         PoPageModule,
         PoToolbarModule,
-        HttpClientTestingModule,
-        RouterTestingModule,
+        AppComponent
       ],
-      declarations: [AppComponent],
+      declarations: [],
     }).compileComponents();
   }));
 

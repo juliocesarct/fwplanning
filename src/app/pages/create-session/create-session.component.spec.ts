@@ -1,6 +1,8 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
-
+import { getFirestore, provideFirestore } from '@angular/fire/firestore';
 import { CreateSessionComponent } from './create-session.component';
+import { provideFirebaseApp, initializeApp } from '@angular/fire/app';
+import { environment } from '../../../environments/environment';
 
 describe('CreateSessionComponent', () => {
   let component: CreateSessionComponent;
@@ -8,7 +10,11 @@ describe('CreateSessionComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [CreateSessionComponent]
+      declarations: [],
+      imports: [CreateSessionComponent,
+        provideFirebaseApp(() => initializeApp(environment.firebaseConfig)),
+        provideFirestore(() => getFirestore())
+      ]
     })
     .compileComponents();
 

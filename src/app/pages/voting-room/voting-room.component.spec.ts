@@ -1,6 +1,9 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
 import { VotingRoomComponent } from './voting-room.component';
+import { environment } from '../../../environments/environment';
+import { initializeApp, provideFirebaseApp } from '@angular/fire/app';
+import { getFirestore, provideFirestore } from '@angular/fire/firestore';
 
 describe('VotingRoomComponent', () => {
   let component: VotingRoomComponent;
@@ -8,7 +11,11 @@ describe('VotingRoomComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [VotingRoomComponent]
+      declarations: [],
+      imports:[VotingRoomComponent,
+        provideFirebaseApp(() => initializeApp(environment.firebaseConfig)),
+        provideFirestore(() => getFirestore())],
+
     })
     .compileComponents();
 

@@ -1,6 +1,9 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
 import { SessionTasksComponent } from './session-tasks.component';
+import { provideFirebaseApp, initializeApp } from '@angular/fire/app';
+import { provideFirestore, getFirestore } from '@angular/fire/firestore';
+import { environment } from '../../../environments/environment';
 
 describe('SessionTasksComponent', () => {
   let component: SessionTasksComponent;
@@ -8,8 +11,12 @@ describe('SessionTasksComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [SessionTasksComponent]
-    })
+      declarations: [],
+      imports: [SessionTasksComponent,
+        provideFirebaseApp(() => initializeApp(environment.firebaseConfig)),
+        provideFirestore(() => getFirestore())
+      ]
+    }) 
     .compileComponents();
 
     fixture = TestBed.createComponent(SessionTasksComponent);
