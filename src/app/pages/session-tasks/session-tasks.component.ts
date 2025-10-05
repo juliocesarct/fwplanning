@@ -24,7 +24,7 @@ export class SessionTasksComponent implements OnInit {
   tasks: Task[] | undefined;
   newTask: TaskModel = new TaskModel("","","",new Date(), new Date(),0,[],false,false);
   isCreator = false;
-  public readonly actions: PoPageAction[] = [{label: 'Adicionar nova tarefa', action: () => this.addTask()}, {label:'Sair da sessão', action: () => this.logout()}];
+  public readonly actions: PoPageAction[] = [{label: 'Votação rápida', action: () => this.startVoting() }, {label:'Adicionar nova tarefa', action: () => this.addTask()}, {label:'Sair da sessão', action: () => this.logout()}];
 
   private firebaseService = inject(FirebaseService);
   private route = inject(ActivatedRoute);
@@ -119,6 +119,21 @@ export class SessionTasksComponent implements OnInit {
     this.form.reset();
   }
 
+  startVoting(){
+    this.newTask.sessionId = this.sessionId!
+    this.newTask.taskId = ((this.tasks ? this.tasks?.length : 0) + 1).toString();
+    this.newTask.description = 'Votação rápida!';
+    this.newTask.voting = true;
+    this.firebaseService.addTask(this.newTask).then(
+    () => {
+      this.poNotification.success(`Item adicionado com sucesso!`);
+      this.confirm.loading = false;
+      this.form.reset();
+      this.closeModal();
+
+    }).catch(error => {
+      this.poNotification.error(error);
+    });
+  }
+
 }
-
-
